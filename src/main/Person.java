@@ -1,6 +1,6 @@
 package src.main;
 
-import java.time.LocalDate;
+import java.time.*;
 
 /**
  * Abstract class Person.
@@ -50,12 +50,18 @@ public abstract class Person {
          * @param dateOfBirth String (format: yyyy-mm-dd)
          */
         public void setDateOfBirth(String dateOfBirth) {
+            // parameter format validation
             try {
                 this.dateOfBirth = LocalDate.parse(dateOfBirth);
             } catch (Exception e) {
-                throw new IllegalArgumentException("Invalid date of birth.");
+                throw new IllegalArgumentException("The format for date of birth should be: yyyy-mm-dd");
             }
-            setAge(); // update age when date of birth has changed
+            // date validation
+            if (this.dateOfBirth.isBefore(LocalDate.now().plusDays(1))) {
+                setAge(); // update age when date of birth has changed
+            } else {
+                throw new IllegalArgumentException("Date of birth cannot be a future date.");
+            } // end if
         } // end method setDateOfBirth
 
         /**
@@ -65,20 +71,8 @@ public abstract class Person {
         private void setAge() {
             // get today's date
             LocalDate today = LocalDate.now();
-            // calculate age based on birth year
-            this.age = today.getYear() - this.dateOfBirth.getYear();
-            // if the person has not passed the birthday this year, age -1
-            if (today.getMonthValue() < this.dateOfBirth.getMonthValue()) {
-                this.age--;
-            } else if (today.getMonthValue() == this.dateOfBirth.getMonthValue()
-                    && today.getDayOfMonth() < this.dateOfBirth.getDayOfMonth()) {
-                this.age--;
-            } // end if
-            
-            // age cannot be negative
-            if (this.age < 0) {
-                throw new IllegalArgumentException("Invalid date of birth.");
-            } // end if
+            // calculate age base on date of birth
+            this.age = Period.between(this.dateOfBirth, today).plusDays(1).getYears();
         } // end method setAge
 
         /**
