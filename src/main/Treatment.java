@@ -1,6 +1,7 @@
 package src.main;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 /**
  * class Treatment
@@ -11,7 +12,8 @@ import java.time.LocalDate;
  */
 
 public class Treatment {
-    private String treatmentId, doctorId, patientId;
+    private final UUID ID;
+    private UUID doctorId, patientId;
     private String medication, description;
     private LocalDate issueDate, startDate, endDate;
 
@@ -24,6 +26,7 @@ public class Treatment {
      * @throws Exception when a string is blank, or when start date is a past date, or when end date is before start date
      */
     public Treatment(String medication, String description, LocalDate startDate, LocalDate endDate) throws Exception {
+        ID = UUID.randomUUID();
         setMedication(medication);
         setDescription(description);
         setIssueDate();
@@ -35,24 +38,16 @@ public class Treatment {
     /**
      * sets the medication of the treatment
      * @param medication String
-     * @throws Exception when the string is blank
      */
-    public void setMedication(String medication) throws Exception {
-        if (medication.isBlank()) {
-            throw new Exception("Invalid input: medication cannot be blank");
-        }
+    public void setMedication(String medication) {
         this.medication = medication;
     } // end method setMedication
 
     /**
      * sets the description of the treatment
      * @param description String
-     * @throws Exception when the string is blank
      */
-    public void setDescription(String description) throws Exception {
-        if (description.isBlank()) {
-            throw new Exception("Invalid input: description cannot be blank");
-        }
+    public void setDescription(String description) {
         this.description = description;
     } // end method setDescription
 

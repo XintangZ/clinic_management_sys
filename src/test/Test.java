@@ -1,12 +1,29 @@
 package src.test;
 
-import src.main.Doctor;
-import src.main.Gender;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
+import java.util.Scanner;
 
-public class Test {
+import src.main.Person;
+import src.main.Utils;
+
+public class Test implements Utils {
     public static void main(String[] args) {
-        Doctor doctor = new Doctor("John", "Smith", "2000-12-31", Gender.M, "123-456-7890", "123 Cat St.",
-                "2020-01-01", "General");
-        System.out.println(doctor);
+        LocalDate date;
+        boolean isNotValid;
+        Scanner scanner = new Scanner(System.in);
+
+        do {
+            date = Utils.parseDate(scanner);
+
+            isNotValid = date.isAfter(LocalDate.now());
+
+            if (isNotValid) {
+                System.out.println("Cannot be a future date.");
+            }
+        } while (isNotValid);
+
+        scanner.close();
     }
 }

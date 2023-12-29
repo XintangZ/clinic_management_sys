@@ -1,7 +1,9 @@
 package src.main;
 
+import java.time.LocalDate;
+
 /**
- * Class Doctor extends the abstract class Employee.
+ * class Doctor extends the abstract class Employee
  * 
  * @version 1.00
  * @since 2023-12-18
@@ -12,19 +14,23 @@ public class Doctor extends Employee {
     // data members
     private String specialty;
 
-    // constructor with params
+    // default constructor
+    public Doctor() {
+        super();
+    } // end default constructor
+
     /**
-     * Constructor with parameters.
+     * constructor with parameters
      * @param firstName String
      * @param lastName String
-     * @param dateOfBirth String (format: yyyy-mm-dd)
+     * @param dateOfBirth LocalDate
      * @param gender Gender ("F" for Female, "M" for Male)
      * @param phoneNumber String
      * @param address String
-     * @param dateOfEmployment String (format: yyyy-mm-dd)
+     * @param dateOfEmployment LocalDate
      * @param specialty String
      */
-    public Doctor(String firstName, String lastName, String dateOfBirth, Gender gender, String phoneNumber,
+    public Doctor(String firstName, String lastName, LocalDate dateOfBirth, String gender, String phoneNumber,
     String address, String dateOfEmployment, String specialty) {
         super(firstName, lastName, dateOfBirth, gender, phoneNumber, address, dateOfEmployment);
         setSpecialty(specialty);
@@ -32,7 +38,7 @@ public class Doctor extends Employee {
 
     // setter methods
     /**
-     * Set the specialty of the doctor.
+     * sets the specialty of the doctor
      * @param specialty String
      */
     public void setSpecialty(String specialty) {
@@ -41,7 +47,7 @@ public class Doctor extends Employee {
 
     // getter methods
     /**
-     * Get the specialty of the doctor.
+     * gets the specialty of the doctor
      * @return String
      */
     public String getSpecialty() {

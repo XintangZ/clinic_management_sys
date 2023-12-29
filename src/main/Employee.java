@@ -1,9 +1,10 @@
 package src.main;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 
 /**
- * Abstract class Employee extends the abstract class Person.
+ * abstract class Employee extends the abstract class Person
  * 
  * @version 1.00
  * @since 2023-12-18
@@ -14,17 +15,22 @@ public abstract class Employee extends Person {
     // data members
     private LocalDate dateOfEmployment;
 
+    // default constructor
+    public Employee() {
+        super();
+    } // end default constructor
+
     /**
-     * Constructor with parameters.
+     * constructor with parameters
      * @param firstName String
      * @param lastName String
-     * @param dateOfBirth String (format: yyyy-mm-dd)
+     * @param dateOfBirth LocalDate
      * @param gender Gender ("F" for Female, "M" for Male)
      * @param phoneNumber String
      * @param address String
-     * @param dateOfEmployment String (format: yyyy-mm-dd)
+     * @param dateOfEmployment LocalDate
      */
-    public Employee(String firstName, String lastName, String dateOfBirth, Gender gender, String phoneNumber,
+    public Employee(String firstName, String lastName, LocalDate dateOfBirth, String gender, String phoneNumber,
             String address, String dateOfEmployment) {
         super(firstName, lastName, dateOfBirth, gender, phoneNumber, address);
         setDateOfEmployment(dateOfEmployment);
@@ -32,24 +38,32 @@ public abstract class Employee extends Person {
 
     // setter methods 
     /**
-     * Set the employed date of the employee.
+     * sets the employed date of the employee
      * @param dateOfEmployment
      */
     public void setDateOfEmployment(String dateOfEmployment) {
         try {
             this.dateOfEmployment = LocalDate.parse(dateOfEmployment);
-        } catch (Exception e) {
-            throw new IllegalArgumentException("Invalid date of employment.");
+
+            if (this.dateOfEmployment.isAfter(LocalDate.now())) {
+                throw new Exception("Error: date of employment cannot be a future date");
+            }
+        } 
+        catch (DateTimeParseException dtpe) {
+            System.out.println("Error: invalid date format.");
+        } 
+        catch (Exception e) {
+            System.out.println(e.getMessage());
         }
     } // end method setDateOfEmployment
 
     // getter methods 
     /**
-     * Get the date of employment of the employee.
-     * @return String (format: yyyy-mm-dd)
+     * gets the date of employment of the employee
+     * @return LocalDate
      */
-    public String getDateOfEmployment() {
-        return this.dateOfEmployment.toString();
+    public LocalDate getDateOfEmployment() {
+        return this.dateOfEmployment;
     } // end method getDateOfEmployment
 
     // return string representation of employee object 

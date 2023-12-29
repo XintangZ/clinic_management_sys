@@ -1,7 +1,9 @@
 package src.main;
 
+import java.time.*;
+
 /**
- * Class Appointment
+ * class Appointment
  * 
  * @version 1.00
  * @since 2023-12-18
@@ -9,5 +11,30 @@ package src.main;
  */
 
 public class Appointment {
-    
+    private String appointmentId, doctorId, patientId;
+    private LocalDate appointmentDate;
+    private LocalTime startTime, endTime;
+
+    public Appointment() {
+
+    }
+
+    public void setDoctor(String doctorId) {
+        this.doctorId = doctorId;
+    }
+
+    public void setPatient(String patientId) {
+        this.patientId = patientId;
+    }
+
+    public void setAppointmentDate(LocalDate appointmentDate) throws Exception {
+        if (appointmentDate.isBefore(LocalDate.now())) {
+            throw new Exception("Invalid input: appointment date cannot be a past date");
+        }
+        this.appointmentDate = appointmentDate;
+    }
+
+    public void setStartTime(LocalTime startTime) {
+
+    }
 }
