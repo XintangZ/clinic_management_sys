@@ -1,7 +1,6 @@
-package src.main;
+package src.person;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeParseException;
 
 /**
  * abstract class Employee extends the abstract class Person
@@ -18,7 +17,7 @@ public abstract class Employee extends Person {
     // default constructor
     public Employee() {
         super();
-    } // end default constructor
+    }
 
     /**
      * constructor with parameters
@@ -29,9 +28,10 @@ public abstract class Employee extends Person {
      * @param phoneNumber String
      * @param address String
      * @param dateOfEmployment LocalDate
+     * @throws Exception
      */
     public Employee(String firstName, String lastName, LocalDate dateOfBirth, String gender, String phoneNumber,
-            String address, String dateOfEmployment) {
+            String address, LocalDate dateOfEmployment) throws Exception {
         super(firstName, lastName, dateOfBirth, gender, phoneNumber, address);
         setDateOfEmployment(dateOfEmployment);
     }
@@ -40,21 +40,13 @@ public abstract class Employee extends Person {
     /**
      * sets the employed date of the employee
      * @param dateOfEmployment
+     * @throws Exception
      */
-    public void setDateOfEmployment(String dateOfEmployment) {
-        try {
-            this.dateOfEmployment = LocalDate.parse(dateOfEmployment);
-
-            if (this.dateOfEmployment.isAfter(LocalDate.now())) {
-                throw new Exception("Error: date of employment cannot be a future date");
-            }
-        } 
-        catch (DateTimeParseException dtpe) {
-            System.out.println("Error: invalid date format.");
-        } 
-        catch (Exception e) {
-            System.out.println(e.getMessage());
+    public void setDateOfEmployment(LocalDate dateOfEmployment) throws Exception {
+        if (dateOfEmployment.isAfter(LocalDate.now())) {
+            throw new Exception("Error: date of employment cannot be a future date");
         }
+        this.dateOfEmployment = dateOfEmployment;
     } // end method setDateOfEmployment
 
     // getter methods 

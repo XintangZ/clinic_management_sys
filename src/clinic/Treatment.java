@@ -1,5 +1,6 @@
-package src.main;
+package src.clinic;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -11,11 +12,19 @@ import java.util.UUID;
  * @author Team 6
  */
 
-public class Treatment {
+public class Treatment implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private final UUID ID;
     private UUID doctorId, patientId;
     private String medication, description;
     private LocalDate issueDate, startDate, endDate;
+
+    // default constructor
+    public Treatment() {
+        ID = UUID.randomUUID();
+        setIssueDate();
+    }
 
     /**
      * constructor with parameter
@@ -65,7 +74,7 @@ public class Treatment {
      */
     public void setStartDate(LocalDate startDate) throws Exception {
         if (startDate.isBefore(issueDate)) {
-            throw new Exception("Invalid input: start date must be a future date.");
+            throw new Exception("Error: start date cannot be a past date.");
         }
         this.startDate = startDate;
     } // end method setStartDate
@@ -77,12 +86,16 @@ public class Treatment {
      */
     public void setEndDate(LocalDate endDate) throws Exception {
         if (endDate.isBefore(startDate)) {
-            throw new Exception("Invalid input: end date must be after the start date.");
+            throw new Exception("Error: end date cannot be earlier than the start date.");
         }
         this.endDate = endDate;
     } // end method setEndDate
 
     // getters
+    public UUID getID() {
+        return this.ID;
+    }
+
     /**
      * gets the medication of the treatment
      * @return String

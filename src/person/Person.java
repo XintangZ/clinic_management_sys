@@ -1,4 +1,4 @@
-package src.main;
+package src.person;
 
 import java.io.Serializable;
 import java.time.*;
@@ -23,7 +23,7 @@ public abstract class Person implements Serializable {
     // default constructor
     public Person() {
         this.ID = UUID.randomUUID();
-    } // end default constructor
+    }
 
     /**
      * constructor with parameters
@@ -33,9 +33,10 @@ public abstract class Person implements Serializable {
      * @param gender Gender ("F" for Female, "M" for Male)
      * @param phoneNumber String
      * @param address String
+     * @throws Exception
      */
     public Person(String firstName, String lastName, LocalDate dateOfBirth, String gender, String phoneNumber,
-            String address) {
+            String address) throws Exception {
             this.ID = UUID.randomUUID();
             setName(firstName, lastName);
             setDateOfBirth(dateOfBirth);
@@ -74,8 +75,12 @@ public abstract class Person implements Serializable {
     /**
      * sets the date of birth of the person
      * @param dateOfBirth LocalDate
+     * @throws Exception
      */
-    public void setDateOfBirth(LocalDate dateOfBirth) {
+    public void setDateOfBirth(LocalDate dateOfBirth) throws Exception {
+        if (dateOfBirth.isAfter(LocalDate.now())) {
+            throw new Exception("Error: date of birth cannot be a future date.");
+        }
         this.dateOfBirth = dateOfBirth;
     } // end method setDateOfBirth
 

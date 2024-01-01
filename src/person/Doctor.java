@@ -1,4 +1,4 @@
-package src.main;
+package src.person;
 
 import java.time.LocalDate;
 
@@ -17,8 +17,8 @@ public class Doctor extends Employee {
     // default constructor
     public Doctor() {
         super();
-    } // end default constructor
-
+    }
+    
     /**
      * constructor with parameters
      * @param firstName String
@@ -29,9 +29,10 @@ public class Doctor extends Employee {
      * @param address String
      * @param dateOfEmployment LocalDate
      * @param specialty String
+     * @throws Exception
      */
     public Doctor(String firstName, String lastName, LocalDate dateOfBirth, String gender, String phoneNumber,
-    String address, String dateOfEmployment, String specialty) {
+    String address, LocalDate dateOfEmployment, String specialty) throws Exception {
         super(firstName, lastName, dateOfBirth, gender, phoneNumber, address, dateOfEmployment);
         setSpecialty(specialty);
     } // end constructor with params

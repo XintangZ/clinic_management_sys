@@ -1,5 +1,6 @@
-package src.main;
+package src.clinic;
 
+import java.io.Serializable;
 import java.time.*;
 
 /**
@@ -10,7 +11,9 @@ import java.time.*;
  * @author Team 6
  */
 
-public class Appointment {
+public class Appointment implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private String appointmentId, doctorId, patientId;
     private LocalDate appointmentDate;
     private LocalTime startTime, endTime;

@@ -1,29 +1,28 @@
 package src.test;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
-import java.util.Scanner;
 
-import src.main.Person;
-import src.main.Utils;
+import src.clinic.Treatment;
+import src.utils.ObjectIO;
+import src.utils.UserInterface;
 
-public class Test implements Utils {
+public class Test {
     public static void main(String[] args) {
-        LocalDate date;
-        boolean isNotValid;
-        Scanner scanner = new Scanner(System.in);
+        UserInterface userInterface = new UserInterface();
 
-        do {
-            date = Utils.parseDate(scanner);
+        ArrayList<Treatment> treatments = new ArrayList<>();
 
-            isNotValid = date.isAfter(LocalDate.now());
+        for (int i = 0; i < 2; i++) {
+            Treatment treatment = userInterface.createTreatment();
+            treatments.add(treatment);
+        }
 
-            if (isNotValid) {
-                System.out.println("Cannot be a future date.");
-            }
-        } while (isNotValid);
+        ObjectIO.writeObjects("treatments.bin", treatments);
 
-        scanner.close();
+        ArrayList<Object> treatements = ObjectIO.readObjects("treatments.bin");
+
+        for (Object obj : treatements) {
+            System.out.println((Treatment) obj);
+        }
     }
 }
