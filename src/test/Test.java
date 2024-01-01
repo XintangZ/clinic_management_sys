@@ -1,12 +1,28 @@
 package src.test;
 
-import src.main.Doctor;
-import src.main.Gender;
+import java.util.ArrayList;
+
+import src.clinic.Treatment;
+import src.utils.ObjectIO;
+import src.utils.UserInterface;
 
 public class Test {
     public static void main(String[] args) {
-        Doctor doctor = new Doctor("John", "Smith", "2000-12-19", Gender.M, "123-456-7890", "123 Cat St.",
-                "2020-01-01", "General");
-        System.out.println(doctor);
+        UserInterface userInterface = new UserInterface();
+
+        ArrayList<Treatment> treatments = new ArrayList<>();
+
+        for (int i = 0; i < 2; i++) {
+            Treatment treatment = userInterface.createTreatment();
+            treatments.add(treatment);
+        }
+
+        ObjectIO.writeObjects("treatments.bin", treatments);
+
+        ArrayList<Object> treatements = ObjectIO.readObjects("treatments.bin");
+
+        for (Object obj : treatements) {
+            System.out.println((Treatment) obj);
+        }
     }
 }

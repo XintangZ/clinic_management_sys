@@ -1,6 +1,8 @@
-package src.main;
+package src.clinic;
 
+import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.UUID;
 
 /**
  * class Treatment
@@ -10,10 +12,19 @@ import java.time.LocalDate;
  * @author Team 6
  */
 
-public class Treatment {
-    private String treatmentId, doctorId, patientId;
+public class Treatment implements Serializable {
+    private static final long serialVersionUID = 1L;
+
+    private final UUID ID;
+    private UUID doctorId, patientId;
     private String medication, description;
     private LocalDate issueDate, startDate, endDate;
+
+    // default constructor
+    public Treatment() {
+        ID = UUID.randomUUID();
+        setIssueDate();
+    }
 
     /**
      * constructor with parameter
@@ -24,6 +35,7 @@ public class Treatment {
      * @throws Exception when a string is blank, or when start date is a past date, or when end date is before start date
      */
     public Treatment(String medication, String description, LocalDate startDate, LocalDate endDate) throws Exception {
+        ID = UUID.randomUUID();
         setMedication(medication);
         setDescription(description);
         setIssueDate();
@@ -35,24 +47,16 @@ public class Treatment {
     /**
      * sets the medication of the treatment
      * @param medication String
-     * @throws Exception when the string is blank
      */
-    public void setMedication(String medication) throws Exception {
-        if (medication.isBlank()) {
-            throw new Exception("Invalid input: medication cannot be blank");
-        }
+    public void setMedication(String medication) {
         this.medication = medication;
     } // end method setMedication
 
     /**
      * sets the description of the treatment
      * @param description String
-     * @throws Exception when the string is blank
      */
-    public void setDescription(String description) throws Exception {
-        if (description.isBlank()) {
-            throw new Exception("Invalid input: description cannot be blank");
-        }
+    public void setDescription(String description) {
         this.description = description;
     } // end method setDescription
 
@@ -70,7 +74,7 @@ public class Treatment {
      */
     public void setStartDate(LocalDate startDate) throws Exception {
         if (startDate.isBefore(issueDate)) {
-            throw new Exception("Invalid input: start date must be a future date.");
+            throw new Exception("Error: start date cannot be a past date.");
         }
         this.startDate = startDate;
     } // end method setStartDate
@@ -82,12 +86,16 @@ public class Treatment {
      */
     public void setEndDate(LocalDate endDate) throws Exception {
         if (endDate.isBefore(startDate)) {
-            throw new Exception("Invalid input: end date must be after the start date.");
+            throw new Exception("Error: end date cannot be earlier than the start date.");
         }
         this.endDate = endDate;
     } // end method setEndDate
 
     // getters
+    public UUID getID() {
+        return this.ID;
+    }
+
     /**
      * gets the medication of the treatment
      * @return String
