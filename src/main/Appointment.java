@@ -1,6 +1,6 @@
 package src.main;
-import java.util.ArrayList;
-import java.util.Date;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * Class Appointment
@@ -11,23 +11,79 @@ import java.util.Date;
  */
 
 public class Appointment {
-    private Date appointmentStartTime;  // format: mm/dd/yyyy hh:mm
-    private Date appointmentEndTime;    // format: mm/dd/yyyy hh:mm
+    private String date;        // format: yyyy-MM-dd
+    private String startTime;   // format: hh:mm a
+    private String endTime;     // format: hh:mm a
     private String patientName;
     private String doctorName;
     private String status;
-    
 
-    public Appointment(Date appointmentStart, Date appointmentEnd, String patientName, String doctorName){
-        setAppointment(appointmentStart, appointmentEnd, patientName, doctorName);
+    static Scanner input = new Scanner(System.in);
+
+    private SimpleDateFormat timeFormat = new SimpleDateFormat(
+                "hh:mm a");
+    private SimpleDateFormat dayFormat = new SimpleDateFormat(
+                "yyyy-MM-dd");
+    
+    public Appointment() {
+        setDate("");
+        setStartTime("");
+        setEndTime("");
+        setAppointment("", "", "Confirmed");
     }
     
-    public void setAppointment(Date appointmentStartTime, Date appointmentEndTime, String patientName, String doctorName) {   // same as edit appointment
-        this.appointmentStartTime = appointmentStartTime;
-        this.appointmentEndTime = appointmentEndTime;
+    public void setAppointment(String patientName, String doctorName, String status) {   // same as edit appointment
         this.patientName = patientName;
         this.doctorName = doctorName;
-    } // receptionist has access to this method
+        this.status = status;
+    }
+
+    public void setAppointmentDate() {
+        System.out.print("Enter a date in the format yyyy mm dd: ");
+        Calendar date = Calendar.getInstance();
+        date.set(Calendar.YEAR, input.nextInt());
+        date.set(Calendar.MONTH, input.nextInt() - 1);
+        date.set(Calendar.DAY_OF_MONTH, input.nextInt());
+        setDate(dayFormat.format(date.getTime()));
+        
+        System.out.print("Enter the starting time in the format hh mm: ");
+        Calendar startTime = Calendar.getInstance();
+        startTime.set(Calendar.HOUR_OF_DAY, input.nextInt());
+        startTime.set(Calendar.MINUTE, input.nextInt());
+        setStartTime(timeFormat.format(startTime.getTime()));
+
+        System.out.print("Enter the ending time in the format hh mm: ");
+        Calendar endTime = Calendar.getInstance();
+        endTime.set(Calendar.HOUR_OF_DAY, input.nextInt());
+        endTime.set(Calendar.MINUTE, input.nextInt());
+        setEndTime(timeFormat.format(endTime.getTime()));
+
+        System.out.println();
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
+
+    public String getDate() {
+        return this.date;
+    }
+
+    public String getStartTime() {
+        return this.startTime;
+    }
+
+    public String getEndTime() {
+        return this.endTime;
+    }
 
     public String getDoctorName() {
         return this.doctorName;
@@ -41,14 +97,16 @@ public class Appointment {
         return this.status;
     }
 
-    public ArrayList<Appointment> getAppointmentList(ArrayList<Appointment> appointments) {
-        ArrayList<Appointment> upcomingAppointments = new ArrayList<>();
-        for (Appointment appointment: appointments) {
-            if (!appointment.getStatus().equals("Complete") || !appointment.getStatus().equals("Cancelled")) {
-                upcomingAppointments.add(appointment);
-            }
-        }
-        return upcomingAppointments;
+    @Override
+    public String toString() {
+        return String.format("%s: %s%n%s: %s%n%s: %s%n%s: %s%n%s: %s%n%s: %s%n",
+        "Date", getDate(),
+        "Start Time", getStartTime(),
+        "End Time", getEndTime(),
+        "Doctor Name", getDoctorName(),
+        "Patient Name", getPatientName(),
+        "Status", getStatus()
+        );
     }
 
 }
