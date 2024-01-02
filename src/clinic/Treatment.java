@@ -74,7 +74,7 @@ public class Treatment implements Serializable {
      */
     public void setStartDate(LocalDate startDate) throws Exception {
         if (startDate.isBefore(issueDate)) {
-            throw new Exception("Error: start date cannot be a past date.");
+            throw new Exception("Invalid date. Start date cannot be a past date.");
         }
         this.startDate = startDate;
     } // end method setStartDate
@@ -86,7 +86,7 @@ public class Treatment implements Serializable {
      */
     public void setEndDate(LocalDate endDate) throws Exception {
         if (endDate.isBefore(startDate)) {
-            throw new Exception("Error: end date cannot be earlier than the start date.");
+            throw new Exception("Invalid date. End date cannot be earlier than the start date.");
         }
         this.endDate = endDate;
     } // end method setEndDate

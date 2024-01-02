@@ -30,7 +30,7 @@ public abstract class Person implements Serializable {
      * @param firstName String
      * @param lastName String
      * @param dateOfBirth LocalDate
-     * @param gender Gender ("F" for Female, "M" for Male)
+     * @param String String ("F" or "f" for Female, "M" or "m" for Male)
      * @param phoneNumber String
      * @param address String
      * @throws Exception
@@ -79,7 +79,7 @@ public abstract class Person implements Serializable {
      */
     public void setDateOfBirth(LocalDate dateOfBirth) throws Exception {
         if (dateOfBirth.isAfter(LocalDate.now())) {
-            throw new Exception("Error: date of birth cannot be a future date.");
+            throw new Exception("Invalid date. Date of birth cannot be a future date.");
         }
         this.dateOfBirth = dateOfBirth;
     } // end method setDateOfBirth
@@ -88,14 +88,16 @@ public abstract class Person implements Serializable {
      * sets the gender of the person
      * @param gender Gender ("F" for Female, "M" for Male)
      */
-    public void setGender(String gender) {
-       switch (gender) {
+    public void setGender(String gender) throws Exception {
+       switch (gender.toUpperCase()) {
         case "F":
             this.gender = Gender.F;
             break;
         case "M":
             this.gender = Gender.M;
             break;
+        default:
+            throw new Exception("Invalid input. Please enter \"F\" (for Female) or \"M\" (for Male).");
        } 
     } // end method setGender
 
@@ -163,10 +165,10 @@ public abstract class Person implements Serializable {
 
     /**
      * gets the gender of the person
-     * @return Gender 
+     * @return String Female or Male 
      */
-    public Gender getGender() {
-        return this.gender;
+    public String getGender() {
+        return this.gender.getGender();
     } // end method getGender
 
     /**

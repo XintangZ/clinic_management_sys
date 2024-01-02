@@ -32,7 +32,7 @@ public class Appointment implements Serializable {
 
     public void setAppointmentDate(LocalDate appointmentDate) throws Exception {
         if (appointmentDate.isBefore(LocalDate.now())) {
-            throw new Exception("Invalid input: appointment date cannot be a past date");
+            throw new Exception("Invalid date. Appointment date cannot be a past date");
         }
         this.appointmentDate = appointmentDate;
     }

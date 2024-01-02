@@ -9,11 +9,11 @@ import java.util.Scanner;
 import src.person.*;
 import src.clinic.Treatment;
 
-public class UserInterface {
+public class InputValidator {
     private Scanner scanner;
     
     // default constructor
-    public UserInterface() {
+    public InputValidator() {
         this.scanner = new Scanner(System.in);
     }
 
@@ -34,7 +34,7 @@ public class UserInterface {
             }
             
             if (isInvalidChoice) {
-                System.err.println("Invalid option. Please try again.");
+                System.err.printf("Invalid option. Please enter a number between 1 and %d. %n", menu.size());
             } else {
                 isInvalidChoice = false;
             }            
@@ -50,7 +50,7 @@ public class UserInterface {
             try {
                 str = this.scanner.nextLine().trim();
                 if (str.isBlank()) {
-                    throw new Exception("Error: input cannot be empty.");
+                    throw new Exception(String.format("Invalid input. %s cannot be empty.", promptMsg));
                 }
                 return str;
             } catch (Exception e) {
@@ -67,13 +67,13 @@ public class UserInterface {
                 num = this.scanner.nextInt();
                 // check if the user input is greater than 0
                 if (num < 0) {
-                    throw new Exception("Error: input cannot be negative.");
+                    throw new Exception(String.format("Invalid input. %s cannot be negative.", promptMsg));
                 } // end if
                 return num;
             } // end try
             catch (InputMismatchException e) {
                 scanner.nextLine();
-                System.err.println("Invalid input, must be an integer.");
+                System.err.println((String.format("Invalid input. %s must be a whole number.", promptMsg)));
             }  // end catch InputMismatchException
             catch (Exception e) {
                 scanner.nextLine();
@@ -91,7 +91,7 @@ public class UserInterface {
                 date = LocalDate.parse(dateToParse);
                 return date;
             } catch (DateTimeParseException dtpe) {
-                System.err.println("Error: invalid date format.");
+                System.err.println("Invalid date format. Format must be \"yyyy-mm-dd\".");
             }
         }
     }
@@ -119,7 +119,7 @@ public class UserInterface {
                 } else if (userInput.equals("n") || userInput.equals("no")) {
                     response = false;
                 } else {
-                    throw new Exception("Invalid response, please try again.");
+                    throw new Exception("Invalid response. Please try again.");
                 } // end if
                 return response;
             } // end try
@@ -199,8 +199,15 @@ public class UserInterface {
             }
         }
         
-        gender = promptForString("Gender");
-        person.setGender(gender);
+        while (true) {
+            gender = promptForString("Gender");
+            try {
+                person.setGender(gender);
+                break;
+            } catch (Exception e) {
+                System.err.println(e.getMessage());
+            }
+        }
 
         phoneNumber = promptForString("Phone Number");
         person.setPhoneNumber(phoneNumber);
