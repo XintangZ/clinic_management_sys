@@ -12,6 +12,7 @@ import java.time.LocalDate;
 
 public abstract class Employee extends Person {
     // data members
+    // private String sinNumber;
     private LocalDate dateOfEmployment;
 
     // default constructor
