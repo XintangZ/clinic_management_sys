@@ -94,7 +94,7 @@ public interface UserInteraction {
             try {
                 date = LocalDate.parse(dateToParse);
                 return date;
-            } catch (DateTimeParseException dtpe) {
+            } catch (DateTimeParseException e) {
                 System.err.println("Invalid date format. Format must be \"yyyy-mm-dd\".");
             }
         }
