@@ -1,5 +1,7 @@
 package src.main;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
@@ -25,25 +27,32 @@ public class HrPage implements UserInteraction {
         ArrayList<String> menu = new ArrayList<>(Arrays.asList(optionList));
 
         while (true) {
+            // display HR menu and prompt the user to choose 
+            System.out.println("======= HR MENU =======");
             int userChoice = UserInteraction.chooseFromMenu(this.scanner, menu);
-            
+            // perform corresponding task base on user chioce
             switch (userChoice) {
-                case 1:
+                case 1:     // add a new doctor
                     System.out.println("======= NEW DOCTOR =======");
                     Doctor doctor = UserInteraction.createDoctor(this.scanner);
                     doctors.add(doctor);
                     ObjectIO.writeObjects(ObjectIO.DOCTOR_FILE_PATH, doctors);
                     break;
-                case 2:
+                case 2:     // search for a doctor
                     Doctor result = (Doctor) UserInteraction.searchForPerson(scanner, doctors);
                     if (result == null) {
                         System.out.println("Doctor not found.");
                     } else {
                         System.out.println("======= SEARCH RESULT =======");
                         System.out.println(result);
+                        if (UserInteraction.promptForResponse(this.scanner,
+                                "Would you like to edit the doctor's information?")) {
+                            editDoctor(result);
+                            ObjectIO.writeObjects(ObjectIO.DOCTOR_FILE_PATH, doctors);
+                        }
                     }
                     break;
-                case 3:
+                case 3:     // print all doctors
                     if (doctors.isEmpty()) {
                         System.out.println("No record.");
                     } else {
@@ -55,7 +64,7 @@ public class HrPage implements UserInteraction {
                         }
                     }
                     break;
-                default:
+                default:    // back to main menu
                     if (UserInteraction.promptForResponse(this.scanner, "Are you sure to leave this page?")) {
                         return;
                     }
@@ -63,4 +72,100 @@ public class HrPage implements UserInteraction {
             } // end switch userChoice
         } // end while loop
     } // end method displayMenu
+
+    private void editDoctor(Doctor doctor) {
+        System.out.println("======= EDIT DOCTOR INFO =======");
+        System.out.println("");
+
+        String input;
+        System.out.print("First Name: " + doctor.getFirstName() + " ");
+        input = this.scanner.nextLine();
+        if (!input.isEmpty()) {
+            doctor.setFirstName(input);
+        }
+
+        System.out.print("Last Name: " + doctor.getLastName() + " ");
+        input = this.scanner.nextLine();
+        if (!input.isEmpty()) {
+            doctor.setLastName(input);
+        }
+
+        System.out.print("Date of Birth: " + doctor.getDateOfBirth() + " ");
+        input = this.scanner.nextLine();
+        if (!input.isEmpty()) {
+            LocalDate newDate;
+            while (true) {
+                try {
+                    newDate = LocalDate.parse(input);
+                    break;
+                } catch (DateTimeParseException e) {
+                    System.err.println("Invalid date format. Format must be \"yyyy-mm-dd\".");
+                    input = this.scanner.nextLine();
+                }
+            }
+
+            while (true) {                
+                try {
+                    doctor.setDateOfBirth(newDate);
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                    this.scanner.nextLine();
+                }
+            }
+        }
+
+        System.out.print("Gender: " + doctor.getGender() + " ");
+        input = this.scanner.nextLine();
+        if (!input.isEmpty()) {
+            while (true) {
+                try {
+                    doctor.setGender(input);
+                    break;
+                } catch (Exception e) {
+                    System.err.println(e.getMessage());
+                }
+            }
+        }
+        
+        System.out.print("Phone Number: " + doctor.getPhoneNumber() + " ");
+        input = this.scanner.nextLine();
+        if (!input.isEmpty()) {
+            doctor.setPhoneNumber(input);
+        }
+
+        System.out.print("Address: " + doctor.getAddress() + " ");
+        input = this.scanner.nextLine();
+        if (!input.isEmpty()) {
+            doctor.setAddress(input);
+        }
+
+        System.out.print("Date of Employment: " + doctor.getDateOfEmployment() + " ");
+        input = this.scanner.nextLine();
+        if (!input.isEmpty()) {
+            LocalDate newDate;
+            while (true) {
+                try {
+                    newDate = LocalDate.parse(input);
+                    break;
+                } catch (DateTimeParseException e) {
+                    System.err.println("Invalid date format. Format must be \"yyyy-mm-dd\".");
+                    this.scanner.nextLine();
+                }
+            }
+
+            while (true) {                
+                try {
+                    doctor.setDateOfEmployment(newDate);
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
+            }
+        }   
+        
+        System.out.print("Specialty: " + doctor.getSpecialty() + " ");
+        input = this.scanner.nextLine();
+        if (!input.isEmpty()) {
+            doctor.setSpecialty(input);
+        }        
+    }
 }
