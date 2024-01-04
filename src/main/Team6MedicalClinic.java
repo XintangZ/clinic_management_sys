@@ -30,6 +30,7 @@ public class Team6MedicalClinic {
 
         while (true) {
             // display main menu and prompt the user to choose 
+            System.out.println("======= MAIN MENU =======");
             int userChoice = UserInteraction.chooseFromMenu(scanner, menu);
             // display sub menu base on user chioce
             switch (userChoice) {
