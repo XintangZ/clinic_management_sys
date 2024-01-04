@@ -2,6 +2,7 @@ package src.clinic;
 
 import java.io.Serializable;
 import java.time.*;
+import java.time.format.DateTimeFormatter;
 
 /**
  * class Appointment
@@ -12,32 +13,95 @@ import java.time.*;
  */
 
 public class Appointment implements Serializable {
-    private static final long serialVersionUID = 1L;
-
-    private String appointmentId, doctorId, patientId;
-    private LocalDate appointmentDate;
-    private LocalTime startTime, endTime;
+    private LocalDate appointmentDate;        // format: yyyy-MM-dd
+    private LocalTime startTime;   // format: hh:mm a
+    private LocalTime endTime;     // format: hh:mm a
+    private String patientName;
+    private String doctorName;
+    private String status;
+    private LocalDate creationDate;
+    private DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("hh:mm a");
 
     public Appointment() {
-
+        this.creationDate = LocalDate.now();
+    }
+    
+    public Appointment(LocalDate appointmentDate, LocalTime startTime, LocalTime endTime, String patientName, String doctorName, String status) throws Exception {
+        setAppointment(appointmentDate, startTime, endTime, patientName, doctorName, status);
+    }
+    
+    public void setAppointment(LocalDate appointmentDate, LocalTime startTime, LocalTime endTime, String patientName, String doctorName, String status) throws Exception {   // same as edit appointment
+        setDate(appointmentDate);
+        setStartTime(startTime);
+        setEndTime(endTime);       
+        setPatientName(patientName);
+        setDoctorName(doctorName);
+        setStatus(status);
     }
 
-    public void setDoctor(String doctorId) {
-        this.doctorId = doctorId;
-    }
-
-    public void setPatient(String patientId) {
-        this.patientId = patientId;
-    }
-
-    public void setAppointmentDate(LocalDate appointmentDate) throws Exception {
-        if (appointmentDate.isBefore(LocalDate.now())) {
-            throw new Exception("Invalid date. Appointment date cannot be a past date");
+    public void setDate(LocalDate date) throws Exception {
+        if (date.isBefore(creationDate)) {
+            throw new Exception("Invalid date. Appointment date cannot be a past date.");
         }
-        this.appointmentDate = appointmentDate;
+        this.appointmentDate = date;
     }
 
     public void setStartTime(LocalTime startTime) {
-
+        this.startTime = startTime;
     }
+
+    public void setEndTime(LocalTime endTime) {
+        this.endTime = endTime;
+    }
+
+    public void setPatientName(String patientName) {
+        this.patientName = patientName;
+    }
+
+    public void setDoctorName(String doctorName) {
+        this.doctorName = doctorName;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public LocalDate getDate() {
+        return this.appointmentDate;
+    }
+
+    public String getStartTime() {
+        return this.startTime.format(timeFormat);
+    }
+
+    public String getEndTime() {
+        return this.endTime.format(timeFormat);
+    }
+
+    public String getDoctorName() {
+        return this.doctorName;
+    }
+
+    public String getPatientName() {
+        return this.patientName;
+    }
+
+    public String getStatus() {
+        return this.status;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s: %s%n%s: %s%n%s: %s%n%s: %s%n%s: %s%n%s: %s%n",
+        "Date", getDate().toString(),
+        "Start Time", getStartTime(),
+        "End Time", getEndTime(),
+        "Doctor Name", getDoctorName(),
+        "Patient Name", getPatientName(),
+        "Status", getStatus()
+        );
+    }
+
+
+    
 }
