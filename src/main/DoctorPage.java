@@ -2,29 +2,38 @@ package src.main;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Scanner;
 
 import src.clinic.Treatment;
 import src.utils.ObjectIO;
+import src.utils.UserInteraction;
 
-public class DoctorPage extends Team6MedicalClinic {
+public class DoctorPage implements UserInteraction {
+    private Scanner scanner;
+
+    public DoctorPage(Scanner scanner) {
+        this.scanner = scanner;
+    }
+    
     // display doctor menu and perform corresponding tasks base on user choice
-    public static void displayMenu() {
+    @Override
+    public void displayMenu() {
         // doctor menu options
         String[] optionList = { "New treatment", "Search for a treatment", "All treatments", "Search for a patient", "All patients", "Main menu" };
         ArrayList<String> menu = new ArrayList<>(Arrays.asList(optionList));
 
         while (true) {
             // load all treatments to memory
-            ArrayList<Object> treatments = ObjectIO.loadData(TREATMENT_FILE_PATH);
+            ArrayList<Object> treatments = ObjectIO.loadData(ObjectIO.TREATMENT_FILE_PATH);
 
-            int userChoice = inputValidator.chooseFromMenu(menu);
+            int userChoice = UserInteraction.chooseFromMenu(this.scanner, menu);
 
             switch (userChoice) {
                 case 1:
                     System.out.println("======= NEW TREATMENT =======");
-                    Treatment newTreatment = inputValidator.createTreatment();
+                    Treatment newTreatment = UserInteraction.createTreatment(this.scanner);
                     treatments.add(newTreatment);
-                    ObjectIO.writeObjects(TREATMENT_FILE_PATH, treatments);
+                    ObjectIO.writeObjects(ObjectIO.TREATMENT_FILE_PATH, treatments);
                     break;
                 case 2:
                     System.out.println("Search for a treatment");
@@ -48,11 +57,11 @@ public class DoctorPage extends Team6MedicalClinic {
                     System.out.println("All patients");
                     break;
                 default:
-                    if (inputValidator.promptForResponse("Are you sure to leave this page?")) {
+                    if (UserInteraction.promptForResponse(this.scanner, "Are you sure to leave this page?")) {
                         return;
                     }
                     break;
             } // end switch userChoice
         } // end while loop
-    } // end method displayDoctorMenu
+    } // end method displayMenu
 }

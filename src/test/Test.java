@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import src.person.Doctor;
 import src.utils.ObjectIO;
+import src.utils.UserInteraction;
 
 public class Test {
     public static void main(String[] args) {
@@ -24,32 +25,4 @@ public class Test {
             System.out.println();
         }
     }
-    
-    // static void create(String type) {
-    //     switch (type) {
-    //         case "doctor":
-    //             ArrayList<Doctor> doctors = ObjectIO.loadData(DOCTOR_FILE_PATH);
-    //             System.out.println("======= NEW DOCTOR =======");
-    //             Doctor doctor = inputValidator.createDoctor();
-    //             doctors.add(doctor);
-    //             ObjectIO.writeObjects(DOCTOR_FILE_PATH, doctors);
-    //             break;
-    //         case "patient":
-    //             ArrayList<Patient> patients = ObjectIO.loadData(PATIENT_FILE_PATH);
-    //             System.out.println("======= NEW PATIENT =======");
-    //             Patient patient = inputValidator.createPatient();
-    //             patients.add(patient);
-    //             ObjectIO.writeObjects(PATIENT_FILE_PATH, patients);
-    //             break;
-    //         case "treatment":
-    //             ArrayList<Treatment> treatments = ObjectIO.loadData(TREATMENT_FILE_PATH);
-    //             System.out.println("======= NEW TREATMENT =======");
-    //             Treatment treatment = inputValidator.createTreatment();
-    //             treatments.add(treatment);
-    //             ObjectIO.writeObjects(TREATMENT_FILE_PATH, treatments);       
-    //             break;
-    //         default:
-    //             break;
-    //     }
-    // }
 }

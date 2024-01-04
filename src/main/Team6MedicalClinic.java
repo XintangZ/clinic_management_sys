@@ -3,47 +3,52 @@ package src.main;
 import java.awt.Font;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Scanner;
 
 import src.utils.*;
 
+/**
+ * class Team6MedicalClinic
+ * contains the main method to run the program
+ * 
+ * @version 1.00
+ * @since 2023-12-26
+ * @author Team 6
+ */
+
 public class Team6MedicalClinic {
-    protected static InputValidator inputValidator = new InputValidator();
-    // data file paths
-    protected static final String DOCTOR_FILE_PATH = "data/doctors.bin";
-    protected static final String PATIENT_FILE_PATH = "data/patients.bin";
-    protected static final String TREATMENT_FILE_PATH = "data/treatments.bin";
-    protected static final String APPOINTMENT_FILE_PATH = "data/appointments.bin";
+    static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
+        // define main menu options
+        String[] optionList = { "Reception", "Doctor", "HR", "Quit" };
+        ArrayList<String> menu = new ArrayList<>(Arrays.asList(optionList));
+
         // display logo
         Logo team6logo = new Logo("TEAM6","Wide Latin",Font.ITALIC,12);
         team6logo.printLogo();
 
-        // main menu options
-        String[] optionList = { "Reception", "Doctor", "HR", "Quit" };
-        ArrayList<String> menu = new ArrayList<>(Arrays.asList(optionList));
-
         while (true) {
             // display main menu and prompt the user to choose 
-            int userChoice = inputValidator.chooseFromMenu(menu);
-
+            int userChoice = UserInteraction.chooseFromMenu(scanner, menu);
+            // display sub menu base on user chioce
             switch (userChoice) {
-                case 1:
-                    // reception menu
-                    ReceptionPage.displayMenu();
+                case 1:     // reception menu
+                    ReceptionPage receptionPage = new ReceptionPage(scanner);
+                    receptionPage.displayMenu();
                     break;
-                case 2:
-                    // doctor menu
-                    DoctorPage.displayMenu();
+                case 2:     // doctor menu
+                    DoctorPage doctorPage = new DoctorPage(scanner);
+                    doctorPage.displayMenu();
                     break;
-                case 3:
-                    // HR menu
-                    HrPage.displayMenu();
+                case 3:     // HR menu
+                    HrPage hrPage = new HrPage(scanner);
+                    hrPage.displayMenu();
                     break;
-                default:
+                default:    // quit
                     // confirm if the user wants to quit
-                    if (inputValidator.promptForResponse("Are you sure to quit?")) {
-                        inputValidator.close();
+                    if (UserInteraction.promptForResponse(scanner, "Are you sure to quit?")) {
+                        scanner.close();
                         System.exit(0);
                     }
                     break;

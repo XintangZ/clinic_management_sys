@@ -2,31 +2,46 @@ package src.main;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Scanner;
 
 import src.person.Doctor;
 import src.utils.ObjectIO;
+import src.utils.UserInteraction;
 
-public class HrPage extends Team6MedicalClinic {
+public class HrPage implements UserInteraction {
+    private Scanner scanner;
+
+    public HrPage(Scanner scanner) {
+        this.scanner = scanner;
+    }
+
     // display HR menu and perform corresponding tasks base on user choice
-    public static void displayMenu() {
-        ArrayList<Object> doctors = ObjectIO.loadData(DOCTOR_FILE_PATH);
+    @Override
+    public void displayMenu() {
+        ArrayList<Object> doctors = ObjectIO.loadData(ObjectIO.DOCTOR_FILE_PATH);
 
         // HR menu options
         String[] optionList = {"Add a new doctor", "Search for a doctor", "All doctors", "Main menu"};
         ArrayList<String> menu = new ArrayList<>(Arrays.asList(optionList));
 
         while (true) {
-            int userChoice = inputValidator.chooseFromMenu(menu);
+            int userChoice = UserInteraction.chooseFromMenu(this.scanner, menu);
             
             switch (userChoice) {
                 case 1:
                     System.out.println("======= NEW DOCTOR =======");
-                    Doctor doctor = inputValidator.createDoctor();
+                    Doctor doctor = UserInteraction.createDoctor(this.scanner);
                     doctors.add(doctor);
-                    ObjectIO.writeObjects(DOCTOR_FILE_PATH, doctors);
+                    ObjectIO.writeObjects(ObjectIO.DOCTOR_FILE_PATH, doctors);
                     break;
                 case 2:
-                    System.out.println("Search for a doctor");
+                    Doctor result = (Doctor) UserInteraction.searchForPerson(scanner, doctors);
+                    if (result == null) {
+                        System.out.println("Doctor not found.");
+                    } else {
+                        System.out.println("======= SEARCH RESULT =======");
+                        System.out.println(result);
+                    }
                     break;
                 case 3:
                     if (doctors.isEmpty()) {
@@ -41,11 +56,11 @@ public class HrPage extends Team6MedicalClinic {
                     }
                     break;
                 default:
-                    if (inputValidator.promptForResponse("Are you sure to leave this page?")) {
+                    if (UserInteraction.promptForResponse(this.scanner, "Are you sure to leave this page?")) {
                         return;
                     }
                     break;
             } // end switch userChoice
         } // end while loop
-    } // end method displayHrMenu
+    } // end method displayMenu
 }
