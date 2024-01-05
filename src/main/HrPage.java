@@ -15,7 +15,7 @@ public class HrPage extends Team6MedicalClinic {
 
     public static void main(String[] args) {
 
-        hrMenu.execute(scanner, "Are you sure to leave this page?", addNewDoctor, searchForDoctor, displayAllDoctors, backToMainMenu);
+        hrMenu.execute(scanner, "Are you sure to leave this page?", addNewDoctor, searchDoctor, displayAllDoctors);
 
         System.out.println("Leaving...");
     } // end method main
@@ -27,7 +27,7 @@ public class HrPage extends Team6MedicalClinic {
         ObjectIO.writeObjects(ObjectIO.DOCTOR_FILE_PATH, doctors);
     };
 
-    private static Runnable searchForDoctor = () ->{
+    private static Runnable searchDoctor = () -> {
         Doctor result = (Doctor) UserInteraction.searchForPerson(scanner, doctors);
         if (result == null) {
             System.out.println("Doctor not found.");
@@ -52,12 +52,6 @@ public class HrPage extends Team6MedicalClinic {
                 System.out.printf("------- Doctor %d ------- %n", index++);
                 System.out.println((Doctor) obj);
             }
-        }
-    };
-
-    private static Runnable backToMainMenu = () -> {
-        if (UserInteraction.promptForResponse(scanner, "Are you sure to leave this page?")) {
-            return;
         }
     };
 
