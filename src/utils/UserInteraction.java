@@ -1,5 +1,8 @@
 package src.utils;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
@@ -10,6 +13,7 @@ import src.person.BloodType;
 import src.person.Doctor;
 import src.person.Patient;
 import src.person.Person;
+import src.clinic.Appointment;
 
 /**
  * interface UserInteraction <p>
@@ -356,5 +360,35 @@ public interface UserInteraction {
         
         return null;
     }
+    
+    public static Appointment createAppointment(Scanner scanner, String patientName) {
+        LocalDate appointmentDate;
+        LocalTime startTime, endTime;
+        String doctorName;
+        int minutes;
+        Appointment appointment = new Appointment();
 
+        scanner.nextLine();
+        while (true) {
+            appointmentDate = promptForDate(scanner, "Appointment Date");
+            try {
+                appointment.setDate(appointmentDate);
+                break;
+            } catch (Exception e) {
+                System.err.println(e.getMessage());
+            }
+        }
+        appointment.setPatientName(patientName);
+        doctorName = promptForString(scanner, "Doctor Name");
+        appointment.setDoctorName(doctorName);
+        System.out.print("Enter the starting time in the format hh mm: ");
+        String time = String.format("%d:%d", scanner.nextInt(), scanner.nextInt());
+        startTime = LocalTime.parse(time);
+        appointment.setStartTime(startTime);
+        minutes = promptForPositiveInt(scanner, "Length of Appointment (in mins)");
+        endTime = startTime.plusMinutes(minutes);
+        appointment.setEndTime(endTime);
+        appointment.setStatus("Confirmed");
+        return appointment;
+    }
 }

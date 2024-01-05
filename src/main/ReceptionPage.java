@@ -7,6 +7,7 @@ import src.person.Patient;
 import src.utils.Menu;
 import src.utils.ObjectIO;
 import src.utils.UserInteraction;
+import src.clinic.Appointment;
 
 public class ReceptionPage extends Team6MedicalClinic {
     private static Menu receptionMenu = new Menu("reception", "Create appointment", "Search for an appointment",
