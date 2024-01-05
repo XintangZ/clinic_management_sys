@@ -1,8 +1,6 @@
 package src.main;
 
 import java.awt.Font;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Scanner;
 
 import src.utils.*;
@@ -17,42 +15,31 @@ import src.utils.*;
  */
 
 public class Team6MedicalClinic {
-    static Scanner scanner = new Scanner(System.in);
+    protected static Scanner scanner = new Scanner(System.in);
+    private static Menu mainMenu = new Menu("main", "Reception", "Doctor", "HR", "Quit");
 
     public static void main(String[] args) {
-        // define main menu options
-        String[] optionList = { "Reception", "Doctor", "HR", "Quit" };
-        ArrayList<String> menu = new ArrayList<>(Arrays.asList(optionList));
-
         // display logo
-        Logo team6logo = new Logo("TEAM6","Wide Latin",Font.ITALIC,12);
+        Logo team6logo = new Logo("TEAM6", "Wide Latin", Font.ITALIC, 12);
         team6logo.printLogo();
 
-        while (true) {
-            // display main menu and prompt the user to choose 
-            int userChoice = UserInteraction.chooseFromMenu(scanner, menu);
-            // display sub menu base on user chioce
-            switch (userChoice) {
-                case 1:     // reception menu
-                    ReceptionPage receptionPage = new ReceptionPage(scanner);
-                    receptionPage.displayMenu();
-                    break;
-                case 2:     // doctor menu
-                    DoctorPage doctorPage = new DoctorPage(scanner);
-                    doctorPage.displayMenu();
-                    break;
-                case 3:     // HR menu
-                    HrPage hrPage = new HrPage(scanner);
-                    hrPage.displayMenu();
-                    break;
-                default:    // quit
-                    // confirm if the user wants to quit
-                    if (UserInteraction.promptForResponse(scanner, "Are you sure to quit?")) {
-                        scanner.close();
-                        System.exit(0);
-                    }
-                    break;
-            } // end switch userChoice
-        } // end while loop
+        mainMenu.execute(scanner, "Are you sure to quit?", displayReceptionMenu, displayDoctorMenu, displayHrMenu);
+
+        System.out.println("Quitting...");
+        scanner.close();
     } // end method main
+
+    // runnables to be passed as params
+    // reception menu
+    static Runnable displayReceptionMenu = () -> {
+        ReceptionPage.main(null);
+    };
+    // doctor menu
+    static Runnable displayDoctorMenu = () -> {
+        DoctorPage.main(null);
+    };
+    // hr menu
+    static Runnable displayHrMenu = () -> {
+        HrPage.main(null);
+    };
 } // end class Team6MedicalClinic

@@ -1,5 +1,8 @@
-package src.main;
+package src.person;
+import java.time.LocalDate;
 import java.util.*;
+
+import src.clinic.Appointment;
 
 /**
  * Class Receptionist extends the abstract class Employee
@@ -10,9 +13,9 @@ import java.util.*;
  */
 
 public class Receptionist extends Employee {
-    public Receptionist(String firstName, String lastName, String dateOfBirth, Gender gender, String phoneNumber,
-    String address, String dateOfEmployment) {
-        super(firstName, lastName, dateOfBirth, gender, phoneNumber, address, dateOfEmployment);
+    public Receptionist(String firstName, String lastName, LocalDate dateOfBirth, Gender gender, String phoneNumber,
+    String address, LocalDate dateOfEmployment) throws Exception {
+        super(firstName, lastName, dateOfBirth, lastName, phoneNumber, address, dateOfEmployment);
     }
 
     public ArrayList<Appointment> getPatientAppointments(ArrayList<Appointment> appointments, String patientName, String filter) {

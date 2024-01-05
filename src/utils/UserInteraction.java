@@ -27,6 +27,29 @@ import src.clinic.Appointment;
 
 public interface UserInteraction {
     /**
+     * runs a method for a specified number of times
+     * 
+     * @param method a method to run for a certain number of times
+     * @param attempts an int for the number of times the method will run
+     */
+    public static void limitAttempts(RunnableWithException methodToRun, int attempts) throws Exception {
+        do {
+            try {
+                methodToRun.run();
+                return;
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+                if (attempts > 2) {
+                    System.out.printf("%d attempts left. %n", --attempts);
+                } else {
+                    System.out.printf("%d attempt left. %n", --attempts);
+                }
+            }
+        } while (attempts > 0);
+        throw new Exception("Maximum attempts exceeded, session ends.");
+    } // end method limitAttempts
+
+    /**
      * displays a message in the ternimal
      * and prompts the user to enter a non-empty String
      *  
@@ -98,7 +121,7 @@ public interface UserInteraction {
             try {
                 date = LocalDate.parse(dateToParse);
                 return date;
-            } catch (DateTimeParseException dtpe) {
+            } catch (DateTimeParseException e) {
                 System.err.println("Invalid date format. Format must be \"yyyy-mm-dd\".");
             }
         }
@@ -368,6 +391,4 @@ public interface UserInteraction {
         appointment.setStatus("Confirmed");
         return appointment;
     }
-    // abstract method to be implemented
-    void displayMenu();
 }
