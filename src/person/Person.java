@@ -27,6 +27,7 @@ public abstract class Person implements Serializable {
 
     /**
      * constructor with parameters
+     * 
      * @param firstName String
      * @param lastName String
      * @param dateOfBirth LocalDate
@@ -48,6 +49,7 @@ public abstract class Person implements Serializable {
     // setter methods 
     /**
      * sets the first name of the person
+     * 
      * @param firstName String
      */
     public void setFirstName(String firstName) {
@@ -56,6 +58,7 @@ public abstract class Person implements Serializable {
 
     /**
      * sets the lase name of the person
+     * 
      * @param lastName String
      */
     public void setLastName(String lastName) {
@@ -64,6 +67,7 @@ public abstract class Person implements Serializable {
 
     /**
      * sets the first and lase name of the person
+     * 
      * @param firstName String
      * @param lastName String
      */
@@ -74,6 +78,7 @@ public abstract class Person implements Serializable {
 
     /**
      * sets the date of birth of the person
+     * 
      * @param dateOfBirth LocalDate
      * @throws Exception
      */
@@ -86,23 +91,25 @@ public abstract class Person implements Serializable {
 
     /**
      * sets the gender of the person
+     * 
      * @param gender Gender ("F" for Female, "M" for Male)
      */
     public void setGender(String gender) throws Exception {
-       switch (gender.toUpperCase()) {
-        case "F":
-            this.gender = Gender.F;
-            break;
-        case "M":
-            this.gender = Gender.M;
-            break;
-        default:
-            throw new Exception("Invalid input. Please enter \"F\" (for Female) or \"M\" (for Male).");
-       } 
+        switch (gender.toUpperCase()) {
+            case "F":
+                this.gender = Gender.F;
+                break;
+            case "M":
+                this.gender = Gender.M;
+                break;
+            default:
+                throw new Exception("Invalid input. Please enter \"F\" (for Female) or \"M\" (for Male).");
+        } 
     } // end method setGender
 
     /**
      * sets the phone number of the person
+     * 
      * @param phoneNumber String
      */
     public void setPhoneNumber(String phoneNumber) {
@@ -111,6 +118,7 @@ public abstract class Person implements Serializable {
 
     /**
      * sets the address of the person
+     * 
      * @param address String
      */
     public void setAddress(String address) {
@@ -124,6 +132,7 @@ public abstract class Person implements Serializable {
 
     /**
      * gets the first name of the person
+     * 
      * @return String
      */
     public String getFirstName() {
@@ -132,6 +141,7 @@ public abstract class Person implements Serializable {
 
     /**
      * gets the last name of the person
+     * 
      * @return String
      */
     public String getLastName() {
@@ -140,6 +150,7 @@ public abstract class Person implements Serializable {
 
     /**
      * gets the first and last name of the person
+     * 
      * @return String
      */
     public String getName() {
@@ -148,6 +159,7 @@ public abstract class Person implements Serializable {
 
     /**
      * gets the date of birth of the person
+     * 
      * @return LocalDate
      */
     public LocalDate getDateOfBirth() {
@@ -157,6 +169,7 @@ public abstract class Person implements Serializable {
     /**
      * gets the age of the person
      * (age is calculated base on date of birth)
+     * 
      * @return int
      */
     public int getAge() {
@@ -165,6 +178,7 @@ public abstract class Person implements Serializable {
 
     /**
      * gets the gender of the person
+     * 
      * @return String Female or Male 
      */
     public String getGender() {
@@ -173,6 +187,7 @@ public abstract class Person implements Serializable {
 
     /**
      * gets the phone number of the person
+     * 
      * @return String
      */
     public String getPhoneNumber() {
@@ -181,6 +196,7 @@ public abstract class Person implements Serializable {
 
     /**
      * gets the address of the person
+     * 
      * @return String
      */
     public String getAddress() {
