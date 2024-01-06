@@ -20,7 +20,7 @@ public class Appointment implements Serializable {
     private String doctorName;
     private String status;
     private LocalDate creationDate;
-    private DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("hh:mm a");
+    private DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("hh:mm");
 
     public Appointment() {
         this.creationDate = LocalDate.now();
@@ -70,12 +70,12 @@ public class Appointment implements Serializable {
         return this.appointmentDate;
     }
 
-    public String getStartTime() {
-        return this.startTime.format(timeFormat);
+    public LocalTime getStartTime() {
+        return this.startTime;
     }
 
-    public String getEndTime() {
-        return this.endTime.format(timeFormat);
+    public LocalTime getEndTime() {
+        return this.endTime;
     }
 
     public String getDoctorName() {
@@ -94,8 +94,8 @@ public class Appointment implements Serializable {
     public String toString() {
         return String.format("%s: %s%n%s: %s%n%s: %s%n%s: %s%n%s: %s%n%s: %s%n",
         "Date", getDate().toString(),
-        "Start Time", getStartTime(),
-        "End Time", getEndTime(),
+        "Start Time", getStartTime().toString(),
+        "End Time", getEndTime().toString(),
         "Doctor Name", getDoctorName(),
         "Patient Name", getPatientName(),
         "Status", getStatus()
