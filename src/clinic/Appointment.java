@@ -2,7 +2,7 @@ package src.clinic;
 
 import java.io.Serializable;
 import java.time.*;
-import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 /**
  * class Appointment
@@ -13,31 +13,48 @@ import java.time.format.DateTimeFormatter;
  */
 
 public class Appointment implements Serializable {
-    private LocalDate appointmentDate;        // format: yyyy-MM-dd
-    private LocalTime startTime;   // format: hh:mm a
-    private LocalTime endTime;     // format: hh:mm a
-    private String patientName;
-    private String doctorName;
-    private String status;
-    private LocalDate creationDate;
-    private DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("hh:mm");
+    private static final long serialVersionUID = 1L;
+    private final int APPOINTMENT_DURATION = 60;
 
+    private LocalDate appointmentDate;        // format: yyyy-MM-dd
+    private LocalTime startTime;              // format: hh:mm
+    private String patientName, doctorName, status, description;
+    private LocalDate creationDate;
+
+    // constructor
     public Appointment() {
         this.creationDate = LocalDate.now();
     }
     
-    public Appointment(LocalDate appointmentDate, LocalTime startTime, LocalTime endTime, String patientName, String doctorName, String status) throws Exception {
-        setAppointment(appointmentDate, startTime, endTime, patientName, doctorName, status);
+    // TODO: add description
+    public Appointment(LocalDate appointmentDate, LocalTime startTime, String patientName, String doctorName, String status) throws Exception {
+        setAppointment(appointmentDate, startTime, patientName, doctorName, status);
     }
     
-    public void setAppointment(LocalDate appointmentDate, LocalTime startTime, LocalTime endTime, String patientName, String doctorName, String status) throws Exception {   // same as edit appointment
+    public void setAppointment(LocalDate appointmentDate, LocalTime startTime, String patientName,
+            String doctorName, String status) throws Exception { // same as edit appointment
         setDate(appointmentDate);
         setStartTime(startTime);
-        setEndTime(endTime);       
         setPatientName(patientName);
         setDoctorName(doctorName);
         setStatus(status);
     }
+
+    /**
+     * sets the date of the appointment
+     * 
+     * @param dateToParse String
+     * @throws Exception
+     */
+    public void setDate(String dateToParse) throws Exception {
+        LocalDate date;
+        try {
+            date = LocalDate.parse(dateToParse);
+        } catch (DateTimeParseException e) {
+            throw new Exception("Invalid date format. Format must be \"yyyy-mm-dd\".");
+        }
+        setDate(date);
+    } // end method setDate
 
     public void setDate(LocalDate date) throws Exception {
         if (date.isBefore(creationDate)) {
@@ -46,12 +63,21 @@ public class Appointment implements Serializable {
         this.appointmentDate = date;
     }
 
-    public void setStartTime(LocalTime startTime) {
-        this.startTime = startTime;
+    public void setStartTime(String timeToParse) throws Exception {
+        LocalTime time;
+        try {
+            time = LocalTime.parse(timeToParse);
+        } catch (DateTimeParseException e) {
+            throw new Exception("Invalid time format. Format must be \"hh:ss\".");
+        }
+        setStartTime(time);    
     }
 
-    public void setEndTime(LocalTime endTime) {
-        this.endTime = endTime;
+    public void setStartTime(LocalTime startTime) throws Exception {
+        if (this.appointmentDate.equals(this.creationDate) && startTime.isBefore(LocalTime.now())) {
+            throw new Exception("Invalid time. Appointment time cannot be a past time.");
+        }
+        this.startTime = startTime;
     }
 
     public void setPatientName(String patientName) {
@@ -75,7 +101,7 @@ public class Appointment implements Serializable {
     }
 
     public LocalTime getEndTime() {
-        return this.endTime;
+        return this.startTime.plusMinutes(APPOINTMENT_DURATION);
     }
 
     public String getDoctorName() {
@@ -90,7 +116,7 @@ public class Appointment implements Serializable {
         return this.status;
     }
 
-    @Override
+    @Override   // TODO: add description
     public String toString() {
         return String.format("%s: %s%n%s: %s%n%s: %s%n%s: %s%n%s: %s%n%s: %s%n",
         "Date", getDate().toString(),
@@ -101,7 +127,4 @@ public class Appointment implements Serializable {
         "Status", getStatus()
         );
     }
-
-
-    
 }

@@ -2,7 +2,7 @@ package src.person;
 
 import java.io.Serializable;
 import java.time.*;
-import java.util.UUID;
+import java.time.format.DateTimeParseException;
 
 /**
  * abstract class Person
@@ -13,16 +13,15 @@ import java.util.UUID;
  */
 
 public abstract class Person implements Serializable {
-    private static final long serialVersionUID = 1L;
     // data members
-    private final UUID ID;
+    private static final long serialVersionUID = 1L;
+
     private String firstName, lastName, phoneNumber, address;
     private LocalDate dateOfBirth;
     private Gender gender;
 
     // default constructor
     public Person() {
-        this.ID = UUID.randomUUID();
     }
 
     /**
@@ -38,7 +37,6 @@ public abstract class Person implements Serializable {
      */
     public Person(String firstName, String lastName, LocalDate dateOfBirth, String gender, String phoneNumber,
             String address) throws Exception {
-            this.ID = UUID.randomUUID();
             setName(firstName, lastName);
             setDateOfBirth(dateOfBirth);
             setGender(gender);
@@ -75,6 +73,22 @@ public abstract class Person implements Serializable {
         this.firstName = firstName;
         this.lastName = lastName;
     } // end method setName
+
+    /**
+     * sets the date of birth of the person
+     * 
+     * @param dateToParse String
+     * @throws Exception
+     */
+    public void setDateOfBirth(String dateToParse) throws Exception {
+        LocalDate dateOfBirth;
+        try {
+            dateOfBirth = LocalDate.parse(dateToParse);
+        } catch (DateTimeParseException e) {
+            throw new Exception("Invalid date format. Format must be \"yyyy-mm-dd\".");
+        }
+        setDateOfBirth(dateOfBirth);
+    } // end method setDateOfBirth
 
     /**
      * sets the date of birth of the person
@@ -126,10 +140,6 @@ public abstract class Person implements Serializable {
     } // end method setAddress
 
     // getter methods 
-    public UUID getID() {
-        return this.ID;
-    }
-
     /**
      * gets the first name of the person
      * 

@@ -1,7 +1,6 @@
 package src.utils;
 
 import java.util.ArrayList;
-import java.util.Scanner;
 
 /**
  * class Menu
@@ -11,7 +10,7 @@ import java.util.Scanner;
  * @author Team 6
  */
 
-public class Menu {
+public class Menu extends InputValidator {
     private String menuHeader;
     private ArrayList<String> menuOptions;
 
@@ -21,6 +20,7 @@ public class Menu {
      * @param menuOptions Strings of menu options to be displayed
      */
     public Menu(String menuHeader, String... menuOptions) {
+        super();
         this.menuHeader = menuHeader;
         this.menuOptions = new ArrayList<>();
 
@@ -44,12 +44,11 @@ public class Menu {
     /**
      * gets user choice from the menu
      * 
-     * @param scanner a Scanner object to read user input
      * @return a String of the number which the user chose
      * @throws Exception when the user input dose not match any menu option number
      */
-    public String getUserChoice(Scanner scanner) throws Exception {
-        String userChoice = scanner.nextLine();
+    public String getUserChoice() throws Exception {
+        String userChoice = scanner.nextLine().trim();
         for (int i = 0; i < menuOptions.size(); i++) {
             if (userChoice.equals(String.valueOf(i + 1))) {
                 return userChoice;
@@ -74,22 +73,41 @@ public class Menu {
         }
     } // end method proceed
 
-    public void execute(Scanner scanner, String exitMsg, Runnable... methods) {
+    /**
+     * displays the menu, 
+     * prompts the user to choose one of the menu options, 
+     * and executes certain method base on user choice 
+     * (the last option will always be quit/leave the menu)
+     * 
+     * @param exitMsg a String of message to be displayed when the user chooses to quit/leave the menu
+     * @param methods Runnable methods to execute for each menu option
+     */
+    public void execute(String exitMsg, Runnable... methods) {
         while (true) {
             String[] userChoice = new String[1];
             try {
-                UserInteraction.limitAttempts(() -> {
+                limitAttempts(() -> {
                     System.out.printf("%n======= %s MENU ======= %n%n", this.menuHeader.toUpperCase());
                     // display main menu options
                     displayOptions();
-                    userChoice[0] = getUserChoice(scanner);
+                    // get user choice
+                    userChoice[0] = getUserChoice();
                 }, 3);
             } catch (Exception e) {
                 System.err.println(e.getMessage());
+                return;
             }
 
             if (userChoice[0].equals(String.valueOf(this.menuOptions.size()))) {
-                if (UserInteraction.promptForResponse(scanner, exitMsg)) {
+                boolean[] isToQuit = new boolean[1];
+                try {
+                    limitAttempts(() -> {
+                        isToQuit[0] = getResponse(exitMsg);
+                    }, attempts);
+                } catch (Exception e) {
+                    System.err.println(e.getMessage());
+                }
+                if (isToQuit[0]) {
                     return;
                 }
             } else {

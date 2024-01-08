@@ -2,7 +2,7 @@ package src.clinic;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.UUID;
+import java.time.format.DateTimeParseException;
 
 /**
  * class Treatment
@@ -15,14 +15,11 @@ import java.util.UUID;
 public class Treatment implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private final UUID ID;
-    private UUID doctorId, patientId;
-    private String medication, description;
+    private String doctorName, patientName, medication, description;
     private LocalDate issueDate, startDate, endDate;
 
     // default constructor
     public Treatment() {
-        ID = UUID.randomUUID();
         setIssueDate();
     }
 
@@ -34,8 +31,7 @@ public class Treatment implements Serializable {
      * @param endDate LocalDate
      * @throws Exception when a string is blank, or when start date is a past date, or when end date is before start date
      */
-    public Treatment(String medication, String description, LocalDate startDate, LocalDate endDate) throws Exception {
-        ID = UUID.randomUUID();
+    public Treatment(String doctorName, String patientName, String medication, String description, LocalDate startDate, LocalDate endDate) throws Exception {
         setMedication(medication);
         setDescription(description);
         setIssueDate();
@@ -45,7 +41,26 @@ public class Treatment implements Serializable {
 
     // setters
     /**
+     * sets the doctor name of the treatment
+     * 
+     * @param medication String
+     */
+    public void setDoctorName(String doctorName) {
+        this.doctorName = doctorName;
+    } // end method setDoctorName
+    
+    /**
+     * sets the patient name of the treatment
+     * 
+     * @param medication String
+     */
+    public void setPatientName(String patientName) {
+        this.patientName = patientName;
+    } // end method setPatientName
+
+    /**
      * sets the medication of the treatment
+     * 
      * @param medication String
      */
     public void setMedication(String medication) {
@@ -54,6 +69,7 @@ public class Treatment implements Serializable {
 
     /**
      * sets the description of the treatment
+     * 
      * @param description String
      */
     public void setDescription(String description) {
@@ -69,6 +85,23 @@ public class Treatment implements Serializable {
 
     /**
      * sets the start date of the treatment
+     * 
+     * @param dateToParse String
+     * @throws Exception
+     */
+    public void setStartDate(String dateToParse) throws Exception {
+        LocalDate startDate;
+        try {
+            startDate = LocalDate.parse(dateToParse);
+        } catch (DateTimeParseException e) {
+            throw new Exception("Invalid date format. Format must be \"yyyy-mm-dd\".");
+        }
+        setStartDate(startDate);
+    } // end method setStartDate
+
+    /**
+     * sets the start date of the treatment
+     * 
      * @param startDate LocalDate
      * @throws Exception when the date is a past date
      */
@@ -81,6 +114,23 @@ public class Treatment implements Serializable {
 
     /**
      * sets the end date of the treatment
+     * 
+     * @param dateToParse String
+     * @throws Exception
+     */
+    public void setEndDate(String dateToParse) throws Exception {
+        LocalDate endDate;
+        try {
+            endDate = LocalDate.parse(dateToParse);
+        } catch (DateTimeParseException e) {
+            throw new Exception("Invalid date format. Format must be \"yyyy-mm-dd\".");
+        }
+        setStartDate(endDate);
+    } // end method setEndDate
+
+    /**
+     * sets the end date of the treatment
+     * 
      * @param endDate LocalDate
      * @throws Exception when the date is before start date
      */
@@ -91,13 +141,28 @@ public class Treatment implements Serializable {
         this.endDate = endDate;
     } // end method setEndDate
 
-    // getters
-    public UUID getID() {
-        return this.ID;
+    // getterse
+    /**
+     * gets the doctor name of the treatment
+     * 
+     * @return String
+     */
+    public String getDoctorName() {
+        return this.doctorName;
+    }
+
+    /**
+     * gets the patient name of the treatment
+     * 
+     * @return String
+     */
+    public String getPatientName() {
+        return this.patientName;
     }
 
     /**
      * gets the medication of the treatment
+     * 
      * @return String
      */
     public String getMedication() {
@@ -106,6 +171,7 @@ public class Treatment implements Serializable {
 
     /**
      * gets the description of the treatment
+     * 
      * @return String
      */
     public String getDescription() {
@@ -114,6 +180,7 @@ public class Treatment implements Serializable {
 
     /**
      * gets the issue date of the treatment
+     * 
      * @return LocalDate
      */
     public LocalDate getIssueDate() {
@@ -122,6 +189,7 @@ public class Treatment implements Serializable {
 
     /**
      * gets the start date of the treatment
+     * 
      * @return LocalDate
      */
     public LocalDate getStartDate() {
@@ -130,6 +198,7 @@ public class Treatment implements Serializable {
 
     /**
      * gets the end date of the treatment
+     * 
      * @return LocalDate
      */
     public LocalDate getEndDate() {
@@ -139,7 +208,7 @@ public class Treatment implements Serializable {
     // return string representation of treatment object 
     @Override
     public String toString() {
-        return String.format("Medication: %s %nDescription: %s %nIssue Date: %s %nStart Date: %s %nEnd date: %s %n",
-                                getMedication(), getDescription(), getIssueDate(), getStartDate(), getEndDate());
+        return String.format("Doctor Name: %s %nPatient Name: %s %nMedication: %s %nDescription: %s %nIssue Date: %s %nStart Date: %s %nEnd date: %s %n",
+                                getDoctorName(), getPatientName(), getMedication(), getDescription(), getIssueDate(), getStartDate(), getEndDate());
     } // end method toString
 }
