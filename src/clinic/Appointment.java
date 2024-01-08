@@ -26,6 +26,7 @@ public class Appointment implements Serializable {
         this.creationDate = LocalDate.now();
     }
     
+    // TODO: add description
     public Appointment(LocalDate appointmentDate, LocalTime startTime, String patientName, String doctorName, String status) throws Exception {
         setAppointment(appointmentDate, startTime, patientName, doctorName, status);
     }
@@ -115,7 +116,7 @@ public class Appointment implements Serializable {
         return this.status;
     }
 
-    @Override
+    @Override   // TODO: add description
     public String toString() {
         return String.format("%s: %s%n%s: %s%n%s: %s%n%s: %s%n%s: %s%n%s: %s%n",
         "Date", getDate().toString(),

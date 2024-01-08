@@ -33,13 +33,16 @@ public abstract class Employee extends Person {
      * @param dateOfEmployment LocalDate
      * @throws Exception
      */
-    public Employee(String firstName, String lastName, LocalDate dateOfBirth, String gender, String phoneNumber,
+    public Employee(String firstName, String lastName, LocalDate dateOfBirth, String gender, String phoneNumber,    // TODO: add sin number
             String address, LocalDate dateOfEmployment) throws Exception {
         super(firstName, lastName, dateOfBirth, gender, phoneNumber, address);
         setDateOfEmployment(dateOfEmployment);
     }
 
     // setter methods 
+
+    // TODO: set sin number
+
     /**
      * sets the employed date of the employee
      * 
@@ -70,6 +73,9 @@ public abstract class Employee extends Person {
     } // end method setDateOfEmployment
 
     // getter methods 
+
+    // TODO: get sin number
+
     /**
      * gets the date of employment of the employee
      * 
@@ -82,6 +88,6 @@ public abstract class Employee extends Person {
     // return string representation of employee object 
     @Override
     public String toString() {
-        return super.toString() + String.format("Date of Employment: %s %n", getDateOfEmployment());
+        return super.toString() + String.format("Date of Employment: %s %n", getDateOfEmployment());        // TODO: add sin number
     } // end method toString
 }
