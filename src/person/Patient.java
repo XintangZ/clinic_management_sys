@@ -11,9 +11,8 @@ import java.time.LocalDate;
  */
 
 public class Patient extends Person {
-    private String allergies, insuranceCompany, policyNumber;
+    private String allergies, insuranceCompany, policyNumber, healthCardNumber;
     private double coveredPercentage;
-    private BloodType bloodType;
 
     public Patient() {
         super();
@@ -21,11 +20,10 @@ public class Patient extends Person {
     
     public Patient(String aFirstName, String aLastName, LocalDate aDateOfBirth, 
                 String aGender, String aPhoneNumber, String anAddress,
-                String anAllergies, BloodType aBloodType,
+                String anAllergies, 
                 String anInsuranceCompany, String aPolicyNumber, int aCoveredPercentage) throws Exception {
         super(aFirstName, aLastName, aDateOfBirth, aGender, aPhoneNumber, anAddress);
         setAllergies(anAllergies);
-        setBloodType(aBloodType);
         setInsuranceCompany(anInsuranceCompany);
         setPolicyNumber(aPolicyNumber);
         setCoveredPercentage(aCoveredPercentage);
@@ -33,10 +31,6 @@ public class Patient extends Person {
 
     public void setAllergies(String theAllergies) {
         this.allergies = theAllergies;
-    }
-
-    public void setBloodType(BloodType theBloodType) {
-        this.bloodType = theBloodType;
     }
 
     public void setInsuranceCompany(String theInsuranceCompany) {
@@ -47,16 +41,24 @@ public class Patient extends Person {
         this.policyNumber = thePolicyNumber;
     }
 
-    public void setCoveredPercentage(int theCoveredPercentage) {
+    public void setCoveredPercentage(String percentageToParse) throws Exception {
+        if (!percentageToParse.matches("\\d+")) {
+            throw new Exception("Invalid input. Percentage must be all digits.");
+        }
+
+        int coveredPercentage = Integer.parseInt(percentageToParse);
+        setCoveredPercentage(coveredPercentage);
+    }
+    
+    public void setCoveredPercentage(int theCoveredPercentage) throws Exception {
+        if (theCoveredPercentage > 100) {
+            throw new Exception("Invalid input. Percentage cannot be greater than 100.");
+        }
         this.coveredPercentage = theCoveredPercentage / 100.0;
     }
 
     public String getAllergies() {
         return this.allergies;
-    }
-
-    public BloodType getBloodType() {
-        return this.bloodType;
     }
 
     public String getInsuranceCompany() {
@@ -74,7 +76,6 @@ public class Patient extends Person {
     @Override
     public String toString() {
         return super.toString() + "Allergies: " + getAllergies()
-        + "\nBlood type: " + getBloodType()
         + "\nInsurance company: " + getInsuranceCompany()
         + "\nPolicy number: " + getPolicyNumber()
         + "\nCovered percentage: " + getCoveredPercentage() * 100 + "%";

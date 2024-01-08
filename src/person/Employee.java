@@ -1,6 +1,7 @@
 package src.person;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 
 /**
  * abstract class Employee extends the abstract class Person
@@ -12,7 +13,7 @@ import java.time.LocalDate;
 
 public abstract class Employee extends Person {
     // data members
-    // private String sinNumber;
+    private String sinNumber;
     private LocalDate dateOfEmployment;
 
     // default constructor
@@ -22,6 +23,7 @@ public abstract class Employee extends Person {
 
     /**
      * constructor with parameters
+     * 
      * @param firstName String
      * @param lastName String
      * @param dateOfBirth LocalDate
@@ -40,12 +42,29 @@ public abstract class Employee extends Person {
     // setter methods 
     /**
      * sets the employed date of the employee
+     * 
+     * @param dateToParse String
+     * @throws Exception
+     */
+    public void setDateOfEmployment(String dateToParse) throws Exception {
+        LocalDate dateOfEmployment;
+        try {
+            dateOfEmployment = LocalDate.parse(dateToParse);
+        } catch (DateTimeParseException e) {
+            throw new Exception("Invalid date format. Format must be \"yyyy-mm-dd\".");
+        }
+        setDateOfEmployment(dateOfEmployment);
+    } // end method setDateOfEmployment
+
+    /**
+     * sets the employed date of the employee
+     * 
      * @param dateOfEmployment
      * @throws Exception
      */
     public void setDateOfEmployment(LocalDate dateOfEmployment) throws Exception {
         if (dateOfEmployment.isAfter(LocalDate.now())) {
-            throw new Exception("Error: date of employment cannot be a future date");
+            throw new Exception("Invalid input. Date of employment cannot be a future date");
         }
         this.dateOfEmployment = dateOfEmployment;
     } // end method setDateOfEmployment
@@ -53,6 +72,7 @@ public abstract class Employee extends Person {
     // getter methods 
     /**
      * gets the date of employment of the employee
+     * 
      * @return LocalDate
      */
     public LocalDate getDateOfEmployment() {

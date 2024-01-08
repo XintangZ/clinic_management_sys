@@ -21,6 +21,7 @@ public class Doctor extends Employee {
     
     /**
      * constructor with parameters
+     * 
      * @param firstName String
      * @param lastName String
      * @param dateOfBirth LocalDate
@@ -40,6 +41,7 @@ public class Doctor extends Employee {
     // setter methods
     /**
      * sets the specialty of the doctor
+     * 
      * @param specialty String
      */
     public void setSpecialty(String specialty) {
@@ -49,6 +51,7 @@ public class Doctor extends Employee {
     // getter methods
     /**
      * gets the specialty of the doctor
+     * 
      * @return String
      */
     public String getSpecialty() {
