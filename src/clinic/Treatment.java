@@ -31,7 +31,7 @@ public class Treatment implements Serializable {
      * @param endDate LocalDate
      * @throws Exception when a string is blank, or when start date is a past date, or when end date is before start date
      */
-    public Treatment(String medication, String description, LocalDate startDate, LocalDate endDate) throws Exception {
+    public Treatment(String doctorName, String patientName, String medication, String description, LocalDate startDate, LocalDate endDate) throws Exception {
         setMedication(medication);
         setDescription(description);
         setIssueDate();
@@ -40,6 +40,24 @@ public class Treatment implements Serializable {
     } // end constructor with parameter
 
     // setters
+    /**
+     * sets the doctor name of the treatment
+     * 
+     * @param medication String
+     */
+    public void setDoctorName(String doctorName) {
+        this.doctorName = doctorName;
+    } // end method setDoctorName
+    
+    /**
+     * sets the patient name of the treatment
+     * 
+     * @param medication String
+     */
+    public void setPatientName(String patientName) {
+        this.patientName = patientName;
+    } // end method setPatientName
+
     /**
      * sets the medication of the treatment
      * 
@@ -125,6 +143,24 @@ public class Treatment implements Serializable {
 
     // getterse
     /**
+     * gets the doctor name of the treatment
+     * 
+     * @return String
+     */
+    public String getDoctorName() {
+        return this.doctorName;
+    }
+
+    /**
+     * gets the patient name of the treatment
+     * 
+     * @return String
+     */
+    public String getPatientName() {
+        return this.patientName;
+    }
+
+    /**
      * gets the medication of the treatment
      * 
      * @return String
@@ -172,7 +208,7 @@ public class Treatment implements Serializable {
     // return string representation of treatment object 
     @Override
     public String toString() {
-        return String.format("Medication: %s %nDescription: %s %nIssue Date: %s %nStart Date: %s %nEnd date: %s %n",
-                                getMedication(), getDescription(), getIssueDate(), getStartDate(), getEndDate());
+        return String.format("Doctor Name: %s %nPatient Name: %s %nMedication: %s %nDescription: %s %nIssue Date: %s %nStart Date: %s %nEnd date: %s %n",
+                                getDoctorName(), getPatientName(), getMedication(), getDescription(), getIssueDate(), getStartDate(), getEndDate());
     } // end method toString
 }
