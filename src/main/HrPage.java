@@ -1,153 +1,88 @@
 package src.main;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 
 import src.person.Doctor;
 import src.utils.Menu;
 import src.utils.ObjectIO;
-import src.utils.UserInteraction;
+
+/**
+ * class HrPage extends Team6MedicalClinic
+ * contains the main method to run the HrPage
+ * 
+ * @version 1.00
+ * @since 2024-01-04
+ * @author Team 6
+ */
 
 public class HrPage extends Team6MedicalClinic {
-    private static Menu hrMenu = new Menu("hr","Add a new doctor", "Search for a doctor", "All doctors", "Main menu");
-    private static ArrayList<Object> doctors = ObjectIO.loadData(ObjectIO.DOCTOR_FILE_PATH);;
+    private static Menu hrMenu = new Menu("hr","Register new doctor", "Search for a doctor", "All doctors", "Main menu");
+    private static ArrayList<Object> doctorList = ObjectIO.loadData(ObjectIO.DOCTOR_FILE_PATH);
 
     public static void main(String[] args) {
-
-        hrMenu.execute(scanner, "Are you sure to leave this page?", addNewDoctor, searchDoctor, displayAllDoctors);
-
+        // execute hr menu
+        hrMenu.execute("Are you sure to leave this page?", registerDoctor, searchDoctors, displayAllDoctors);
+        // quit message
         System.out.println("Leaving...");
     } // end method main
 
-    private static Runnable addNewDoctor = () -> {
+    // runnables to be passed as params
+    // register doctor
+    private static Runnable registerDoctor = () -> {
         System.out.println("======= NEW DOCTOR =======");
-        Doctor doctor = UserInteraction.createDoctor(scanner);
-        doctors.add(doctor);
-        ObjectIO.writeObjects(ObjectIO.DOCTOR_FILE_PATH, doctors);
+        Doctor doctor;
+        try {
+            doctor = user.createDoctor();
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            return;
+        }
+        doctorList.add(doctor);
+        ObjectIO.writeObjects(ObjectIO.DOCTOR_FILE_PATH, doctorList);
     };
 
-    private static Runnable searchDoctor = () -> {
-        Doctor result = (Doctor) UserInteraction.searchForPerson(scanner, doctors);
+    // search doctors
+    private static Runnable searchDoctors = () -> {
+        Doctor result;
+        try {
+            result = (Doctor) user.searchForPerson(doctorList);
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            return;
+        }
+        
         if (result == null) {
             System.out.println("Doctor not found.");
-        } else {
-            System.out.println("======= SEARCH RESULT =======");
-            System.out.println(result);
-            if (UserInteraction.promptForResponse(scanner,
-                    "Would you like to edit the doctor's information?")) {
-                editDoctor(result);
-                ObjectIO.writeObjects(ObjectIO.DOCTOR_FILE_PATH, doctors);
+            return; // return if no result found
+        }
+        
+        System.out.println("======= SEARCH RESULT =======");
+        System.out.println(result); // print the result
+
+        boolean[] isToEdit = new boolean[1];
+        try {
+            user.limitAttempts(() -> {
+                isToEdit[0] = user.getResponse(
+                        "Would you like to edit the doctor's information?");  // ask if the user wants to edit the found object
+            }, 3);
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            return;
+        }
+        
+        if (isToEdit[0]) { 
+            try {
+                user.editDoctor(result); // edit object attributes
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+                return;
             }
+            ObjectIO.writeObjects(ObjectIO.DOCTOR_FILE_PATH, doctorList); // write objects to data file
         }
     };
-
+    
+    // display all doctors
     private static Runnable displayAllDoctors = () -> {
-        if (doctors.isEmpty()) {
-            System.out.println("No record.");
-        } else {
-            System.out.println("======= ALL DOCTORS =======");
-            int index = 1;
-            for (Object obj : doctors) {
-                System.out.printf("------- Doctor %d ------- %n", index++);
-                System.out.println((Doctor) obj);
-            }
-        }
+        user.printAll(doctorList, Doctor.class);
     };
-
-    private static void editDoctor(Doctor doctor) {
-        System.out.println("======= EDIT DOCTOR INFO =======");
-        System.out.println("");
-
-        String input;
-        System.out.print("First Name: " + doctor.getFirstName() + " ");
-        input = scanner.nextLine();
-        if (!input.isEmpty()) {
-            doctor.setFirstName(input);
-        }
-
-        System.out.print("Last Name: " + doctor.getLastName() + " ");
-        input = scanner.nextLine();
-        if (!input.isEmpty()) {
-            doctor.setLastName(input);
-        }
-
-        System.out.print("Date of Birth: " + doctor.getDateOfBirth() + " ");
-        input = scanner.nextLine();
-        if (!input.isEmpty()) {
-            LocalDate newDate;
-            while (true) {
-                try {
-                    newDate = LocalDate.parse(input);
-                    break;
-                } catch (DateTimeParseException e) {
-                    System.err.println("Invalid date format. Format must be \"yyyy-mm-dd\".");
-                    input = scanner.nextLine();
-                }
-            }
-
-            while (true) {                
-                try {
-                    doctor.setDateOfBirth(newDate);
-                } catch (Exception e) {
-                    System.out.println(e.getMessage());
-                    scanner.nextLine();
-                }
-            }
-        }
-
-        System.out.print("Gender: " + doctor.getGender() + " ");
-        input = scanner.nextLine();
-        if (!input.isEmpty()) {
-            while (true) {
-                try {
-                    doctor.setGender(input);
-                    break;
-                } catch (Exception e) {
-                    System.err.println(e.getMessage());
-                }
-            }
-        }
-        
-        System.out.print("Phone Number: " + doctor.getPhoneNumber() + " ");
-        input = scanner.nextLine();
-        if (!input.isEmpty()) {
-            doctor.setPhoneNumber(input);
-        }
-
-        System.out.print("Address: " + doctor.getAddress() + " ");
-        input = scanner.nextLine();
-        if (!input.isEmpty()) {
-            doctor.setAddress(input);
-        }
-
-        System.out.print("Date of Employment: " + doctor.getDateOfEmployment() + " ");
-        input = scanner.nextLine();
-        if (!input.isEmpty()) {
-            LocalDate newDate;
-            while (true) {
-                try {
-                    newDate = LocalDate.parse(input);
-                    break;
-                } catch (DateTimeParseException e) {
-                    System.err.println("Invalid date format. Format must be \"yyyy-mm-dd\".");
-                    scanner.nextLine();
-                }
-            }
-
-            while (true) {                
-                try {
-                    doctor.setDateOfEmployment(newDate);
-                } catch (Exception e) {
-                    System.out.println(e.getMessage());
-                }
-            }
-        }   
-        
-        System.out.print("Specialty: " + doctor.getSpecialty() + " ");
-        input = scanner.nextLine();
-        if (!input.isEmpty()) {
-            doctor.setSpecialty(input);
-        }        
-    }
-}
+} // end class HrPage
