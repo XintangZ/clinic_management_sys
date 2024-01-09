@@ -74,7 +74,7 @@ public class HrPage extends Team6MedicalClinic {
             try {
                 user.editDoctor(result); // edit object attributes
             } catch (Exception e) {
-                System.out.println(e.getMessage());
+                System.err.println(e.getMessage());
                 return;
             }
             ObjectIO.writeObjects(ObjectIO.DOCTOR_FILE_PATH, doctorList); // write objects to data file

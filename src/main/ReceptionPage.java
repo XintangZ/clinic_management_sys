@@ -32,6 +32,8 @@ public class ReceptionPage extends Team6MedicalClinic {
     private static Scanner scanner = new Scanner(System.in);
     private static User user = new User();
 
+    private static ArrayList<Appointment> appointments = new ArrayList<>();
+
     public static void main(String[] args) {
         
         // execute reception menu
@@ -69,6 +71,10 @@ public class ReceptionPage extends Team6MedicalClinic {
         // all incoming appointments
         ArrayList<Appointment> futureAppointment = getFutureAppointments(appointmentList);
         getDoctorAppointments(futureAppointment, doctorName);
+        System.out.println(
+                "+---------------------------------------------------------------------------------------------+"); 
+        System.out.print("|                    "); 
+        printScheduleHeader(BusinessHours.OPEN_TIME_AM.getTime());   
         printSchedule(scheduleStartDate, scheduleEndDate, futureAppointment);
 
         // search for patient
@@ -95,6 +101,7 @@ public class ReceptionPage extends Team6MedicalClinic {
             System.err.println(e.getMessage());
             return;
         }
+
     };
     
     // search appointments
@@ -167,45 +174,72 @@ public class ReceptionPage extends Team6MedicalClinic {
      * @param time a LocalTime when the time table begins
      */
     static void printDailySchedule(LocalDate date, LocalTime time, ArrayList<Appointment> doctorAppointments) {
-        if (time.equals(BusinessHours.CLOSE_TIME_PM.getTime())) {   // base case
+        if (time.equals(BusinessHours.CLOSE_TIME_PM.getTime())) { // base case
             System.out.println("|");
             return;
         }
 
         if (time.equals(BusinessHours.CLOSE_TIME_AM.getTime())) {
-            System.out.print("\t");
+            System.out.print("|");
             printDailySchedule(date, BusinessHours.OPEN_TIME_PM.getTime(), doctorAppointments); // skip lunch break
         } else {
             if (checkAvailability(doctorAppointments, date, time)) {
-                System.out.printf("%s\t", time);    // if the doctor is available, print the time slot
+                System.out.print("|           ");    // if the doctor is available, print nothing
                 printDailySchedule(date, time.plusMinutes(60), doctorAppointments);
             } else {
-                System.out.printf("\t\t");      // if the doctor is not available, print white spaces only
+                System.out.print("|     x     ");      // if the doctor is not available, print x
                 printDailySchedule(date, time.plusMinutes(60), doctorAppointments);
             }
         }
     } // end method printDailySchedule
 
     /**
-     * recursively prints a schedule of a specified range of days
+     * recursively prints a schedule table of a specified range of days
      * 
      * @param startDate a LocalDate of the date the schedule begins
      * @param endDate a LocalDate of the date the schedule ends
      */
     static void printSchedule(LocalDate startDate, LocalDate endDate, ArrayList<Appointment> doctorAppointments) {
-        if (startDate.isAfter(endDate)) {   // base case
+        System.out.println(
+                "+---------------------------------------------------------------------------------------------+");
+        if (startDate.isAfter(endDate)) { // base case
             return;
         }
 
         if (startDate.getDayOfWeek().equals(DayOfWeek.SATURDAY) || startDate.getDayOfWeek().equals(DayOfWeek.SUNDAY)) { // skip weekends
-            System.out.println("|");
-            printSchedule(startDate.plusDays(1), endDate, doctorAppointments);
+            System.out.println(
+                    "|                                                                                             |");
+            printSchedule(startDate.plusDays(2), endDate, doctorAppointments);
         } else {
-            System.out.printf("| %s (%s)\t", startDate.getDayOfWeek().toString().substring(0, 3), startDate);     // print day of the week and date
+            System.out.printf("|  %s (%s)  ", startDate.getDayOfWeek().toString().substring(0, 3), startDate);     // print day of the week and date
             printDailySchedule(startDate, BusinessHours.OPEN_TIME_AM.getTime(), doctorAppointments);    // print the time slots for the day
             printSchedule(startDate.plusDays(1), endDate, doctorAppointments);
         }
     } // end method printSchedule
+
+    /**
+     * recursively prints a time table of a day.
+     * each time slot is of 30-min length, 
+     * the time table will be from 9am to 14pm, 
+     * with a lunchbreak from noon to 1pm
+     * 
+     * @param date a LocalDate of the current day
+     * @param time a LocalTime when the time table begins
+     */
+    static void printScheduleHeader(LocalTime time) {
+        if (time.equals(BusinessHours.CLOSE_TIME_PM.getTime())) { // base case
+            System.out.println("|");
+            return;
+        }
+
+        if (time.equals(BusinessHours.CLOSE_TIME_AM.getTime())) {
+            System.out.print("|");
+            printScheduleHeader(BusinessHours.OPEN_TIME_PM.getTime()); // skip lunch break
+        } else {
+            System.out.printf("|   %s   ", time);      // if the doctor is not available, print x
+            printScheduleHeader(time.plusMinutes(60));
+        }
+    } // end method printScheduleHeader    
 
     /**
      * gets all doctors of a certain specialty

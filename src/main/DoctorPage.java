@@ -79,7 +79,7 @@ public class DoctorPage extends Team6MedicalClinic {
             try {
                 user.editTreatment(result); // edit object attributes
             } catch (Exception e) {
-                System.out.println(e.getMessage());
+                System.err.println(e.getMessage());
                 return;
             }
             ObjectIO.writeObjects(ObjectIO.TREATMENT_FILE_PATH, treatmentList); // write objects to data file
@@ -124,7 +124,7 @@ public class DoctorPage extends Team6MedicalClinic {
             try {
                 user.editPatient(result); // edit object attributes
             } catch (Exception e) {
-                System.out.println(e.getMessage());
+                System.err.println(e.getMessage());
                 return;
             }
             ObjectIO.writeObjects(ObjectIO.PATIENT_FILE_PATH, patientList); // write objects to data file
