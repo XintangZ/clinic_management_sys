@@ -125,8 +125,12 @@ public abstract class Person implements Serializable {
      * sets the phone number of the person
      * 
      * @param phoneNumber String
+     * @throws Exception if the phone number does not match the format xxx-xxx-xxxx
      */
-    public void setPhoneNumber(String phoneNumber) {
+    public void setPhoneNumber(String phoneNumber) throws Exception {
+        if (!phoneNumber.matches("[2-9][0-9]{2}-[0-9]{3}-[0-9]{4}")) {
+            throw new Exception("Invalid input. Phone number must be all digits in format \"xxx-xxx-xxxx\".");
+        }
         this.phoneNumber = phoneNumber;
     } // end method setPhoneNumber
 
