@@ -3,11 +3,12 @@ package src.main;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
+import java.util.*;
 
 import src.person.Doctor;
 import src.person.Patient;
 import src.utils.Menu;
+import src.utils.User;
 import src.utils.ObjectIO;
 import src.utils.UserInteraction;
 import src.clinic.Appointment;
@@ -28,10 +29,11 @@ public class ReceptionPage extends Team6MedicalClinic {
     private static ArrayList<Object> patientList = ObjectIO.loadData(ObjectIO.PATIENT_FILE_PATH);
     private static ArrayList<Object> appointmentList = ObjectIO.loadData(ObjectIO.APPOINTMENT_FILE_PATH);
     private static ArrayList<Object> doctorList = ObjectIO.loadData(ObjectIO.DOCTOR_FILE_PATH);
+    private static Scanner scanner = new Scanner(System.in);
+    private static User user = new User();
 
     public static void main(String[] args) {
-        // all incoming appointments
-        ArrayList<Object> futureAppointment = getFutureAppointments(appointmentList);
+        
         // execute reception menu
         receptionMenu.execute("Are you sure to leave this page?", createAppointment,
                 searchAppointments, displayAllAppointments, registerPatient, DoctorPage.searchPatients, DoctorPage.displayAllPatients);
@@ -44,51 +46,66 @@ public class ReceptionPage extends Team6MedicalClinic {
     private static Runnable createAppointment = () -> {
         LocalDate scheduleStartDate = LocalDate.now().plusDays(1);
         LocalDate scheduleEndDate = scheduleStartDate.plusDays(13);
+        String doctorName = "";
 
-        // TODO:
         // ask for specialty (call getSpecialtyDoctors
-        // select doctor (doctor = chooseFromMenu
-        // display doctor schedule (printSchedule
-        printSchedule(scheduleStartDate, scheduleEndDate, null);
-        // ask if to create an appointment
-        // ask if the patient is new
-        // search for patient || create new patient
-        // select date
-        // select time
-        // enter the rest of attrs for the appointment
-        String patientName = "";
-        boolean noPatientDetails = true;
-        while (noPatientDetails) {
-            if (user.getResponse("Is the person a new patient?")) {
-                System.out.println("\n======= NEW PATIENT =======");
-                Patient patient = user.createPatient();
-                patientList.add(patient);
-                patientName = patient.getName();
-                noPatientDetails = false;
-                // ObjectIO.writeObjects(ObjectIO.PATIENT_FILE_PATH, patients);
-            } else {
-                Object patient = user.searchForPerson(patientList);
-                if (patient == null) {
-                    System.out.println("\nThis person does not exist.");
-                } else {
-                    patientName = ((Patient)patient).getName();
-                    noPatientDetails = false;
-                }
+        ArrayList<String> specialties = new ArrayList<>();
+        for (Object doctor : doctorList) {
+            if (!specialties.contains(((Doctor) doctor).getSpecialty())) {
+                specialties.add(((Doctor) doctor).getSpecialty());
             }
         }
+        int response = UserInteraction.chooseFromMenu(scanner, specialties);
+        ArrayList<Doctor> doctors = getSpecialtyDoctors(doctorList, specialties.get(response - 1));
+
+        // select doctor (doctor = chooseFromMenu
+        ArrayList<String> doctorNames = new ArrayList<>();
+        for (Doctor doctor : doctors) {
+            doctorNames.add(doctor.getName());
+        }
+        response = UserInteraction.chooseFromMenu(scanner, doctorNames);
+        doctorName = doctorNames.get(response - 1);
+        // display doctor schedule (printSchedule
+        // all incoming appointments
+        ArrayList<Appointment> futureAppointment = getFutureAppointments(appointmentList);
+        getDoctorAppointments(futureAppointment, doctorName);
+        printSchedule(scheduleStartDate, scheduleEndDate, futureAppointment);
+
+        // search for patient
+        Patient result;
+        try {
+            result = (Patient) user.searchForPerson(patientList);
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            return;
+        }
+        
+        if (result == null) {
+            System.out.println("Patient not found.");
+            return; // return if no result found
+        }
+
         scanner.nextLine();
         System.out.println("\n======= ENTER APPOINTMENT DETAILS =======");
-        Appointment appointment = UserInteraction.createAppointment(scanner, patientName);
-        System.out.println("\n======= APPOINTMENT SUCCESSFULLY CREATED =======");
-        System.out.println(appointment);
-        scanner.nextLine();
+        try {
+            Appointment appointment = User.createAppointment(result.getName(), doctorName);
+            System.out.println("\n======= APPOINTMENT SUCCESSFULLY CREATED =======");
+            System.out.println(appointment);
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            return;
+        }
     };
     
     // search appointments
     private static Runnable searchAppointments = () -> {
         String[] filterMenu = {"Confirmed", "Cancelled"};
         ArrayList<Object> filter = new ArrayList<>();
-        int response = UserInteraction.chooseFromMenu(scanner, filterMenu);
+        ArrayList<String> menu = new ArrayList<>();
+        for (String item : filterMenu) {
+            menu.add(item);
+        }
+        int response = UserInteraction.chooseFromMenu(scanner, menu);
         for (Object obj : appointmentList) {
             if (((Appointment) obj).getStatus().equals(filterMenu[response - 1])) {
                 filter.add(obj);
@@ -98,7 +115,17 @@ public class ReceptionPage extends Team6MedicalClinic {
         if (smallerFilter.size() == 0) {
             System.out.println("\nThere are no appointments that matches the criteria.");
         } else if (smallerFilter.size() == 1){
-            if (user.getResponse("There is only one appointment. Do you want to cancel it?")) {
+            boolean[] isToCancel = new boolean[1];
+            try {
+                user.limitAttempts(() -> {
+                isToCancel[0] = user.getResponse(
+                    "There is only one appointment. Do you want to cancel it?");  // ask if the user wants to cancel this appointment
+            }, 3);
+            } catch (Exception e) {
+                System.err.println(e.getMessage());
+                return;
+            }
+             if (isToCancel[0]) { 
                 ((Appointment)smallerFilter.get(0)).setStatus("Cancelled");
                 System.out.println("======= APPOINTMENT CANCELLED =======");
                 System.out.println((Appointment)smallerFilter.get(0));
@@ -207,13 +234,13 @@ public class ReceptionPage extends Team6MedicalClinic {
      * @param doctor the doctor to check
      * @return an ArrayList of Appointment for the specified doctor
      */
-    static ArrayList<Appointment> getDoctorAppointments(ArrayList<Object> appointmentList, Doctor doctor) {
+    static ArrayList<Appointment> getDoctorAppointments(ArrayList<Appointment> appointmentList, String doctorName) {
         ArrayList<Appointment> doctorAppointments = new ArrayList<>();
 
         for (Object obj : appointmentList) {
             Appointment appointment = (Appointment) obj;
-            if (doctor.getName().equals(appointment.getDoctorName())) {
-                appointmentList.add(appointment);
+            if (appointment.getDoctorName().equals(doctorName)) {
+                doctorAppointments.add(appointment);
             }
         } 
 
@@ -232,7 +259,7 @@ public class ReceptionPage extends Team6MedicalClinic {
         for (Object obj : doctorAppointments) {
             Appointment appointment = (Appointment) obj;
             if (appointment.getDate().equals(date) && appointment.getStartTime().equals(time)
-                    && appointment.getStatus().equals("Comfirmed")) {
+                    && appointment.getStatus().equals("Confirmed")) {
                 return false;
             }
         }
@@ -245,13 +272,13 @@ public class ReceptionPage extends Team6MedicalClinic {
      * @param appointmentList an ArrayList of Object containing all appointments
      * @return an ArrayList of Object containing the appointments from today and after
      */
-    static ArrayList<Object> getFutureAppointments(ArrayList<Object> appointmentList) {
-        ArrayList<Object> futureAppointments = new ArrayList<>();
+    static ArrayList<Appointment> getFutureAppointments(ArrayList<Object> appointmentList) {
+        ArrayList<Appointment> futureAppointments = new ArrayList<>();
 
         for (Object obj : appointmentList) {
             Appointment appointment = (Appointment) obj;
             if (!appointment.getDate().isBefore(LocalDate.now())) {
-                futureAppointments.add(obj);
+                futureAppointments.add(appointment);
             }
         } 
 

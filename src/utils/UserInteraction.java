@@ -6,16 +6,14 @@ import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
 import java.time.format.TextStyle;
 import java.time.temporal.TemporalAdjusters;
-import java.util.ArrayList;
-import java.util.InputMismatchException;
-import java.util.Locale;
-import java.util.Scanner;
+import java.util.*;
 
 import src.clinic.Treatment;
 import src.person.Doctor;
 import src.person.Patient;
 import src.person.Person;
 import src.clinic.Appointment;
+import src.utils.InputValidator;
 
 /**
  * interface UserInteraction <p>
@@ -55,24 +53,24 @@ public interface UserInteraction {
     } // end method promptForTime
 
     // deprecated. use Menu class instead
-    static int chooseFromMenu(Scanner scanner, String[] menu) {
+    static int chooseFromMenu(Scanner scanner, ArrayList<String> menu) {
 		boolean isInvalidChoice = true;
         String input;
 
         do {
             System.out.printf("Choose one of the following options (enter a number): %n%n");
-            for (int i = 1; i <= menu.length; i++) {
-                System.out.printf("%3d. %s %n", i, menu[i - 1]);
+            for (int i = 1; i <= menu.size(); i++) {
+                System.out.printf("%3d. %s %n", i, menu.get(i - 1));
             }
             System.out.println();
             input = scanner.nextLine();
 
-            for (int j = 1; j <= menu.length; j++) {
+            for (int j = 1; j <= menu.size(); j++) {
                 isInvalidChoice = isInvalidChoice && (input.compareTo(String.valueOf(j)) != 0);
             }
             
             if (isInvalidChoice) {
-                System.err.printf("Invalid option. Please enter a number between 1 and %d. %n", menu.length);
+                System.err.printf("Invalid option. Please enter a number between 1 and %d. %n", menu.size());
             } else {
                 isInvalidChoice = false;
             }            
@@ -85,8 +83,11 @@ public interface UserInteraction {
     static ArrayList<Object> searchForAppointments(Scanner scanner, ArrayList<Object> arrayList) {
         
         ArrayList<Object> filter = new ArrayList<>();
-
-        String[] menu = {"Doctor's Name", "Patient's Name", "Date", "Specific Appointment"};
+        String[] filterMenu = {"Doctor's Name", "Patient's Name", "Date", "Specific Appointment"};
+        ArrayList<String> menu = new ArrayList<>();
+        for (String item : filterMenu) {
+            menu.add(item);
+        }
         int response = chooseFromMenu(scanner, menu);
 
         switch (response) {
@@ -127,79 +128,5 @@ public interface UserInteraction {
                 }
         }
         return filter;
-    }
-    
-    public static Appointment createAppointment(Scanner scanner, String patientName) {
-        LocalTime startTime, endTime;
-        String doctorName;
-        int minutes;
-        Appointment appointment = new Appointment();
-        // ArrayList<Object> appointmentList = ObjectIO.loadData(ObjectIO.APPOINTMENT_FILE_PATH);
-        ArrayList<Object> appointmentList = new ArrayList<>();
-        ArrayList<Object> filter = new ArrayList<>();
-        appointment.setPatientName(patientName);
-        doctorName = promptForString(scanner, "Doctor Name");
-        appointment.setDoctorName(doctorName);
-
-        for (Object obj : appointmentList) {
-            if (((Appointment) obj).getDoctorName().equals(doctorName)) {
-                filter.add(obj);
-            }
-        }
-        showDoctorAvailabilitySchedule(doctorName, filter);
-        while (true) {
-            try {
-                appointment.setDate(promptForString(scanner, "Appointment Date"));
-                break;
-            } catch (Exception e) {
-                System.err.println(e.getMessage());
-            }
-        }
-        startTime = promptForTime(scanner);
-        appointment.setStartTime(startTime);
-        minutes = promptForPositiveInt(scanner, "Length of Appointment (in mins)");
-        endTime = startTime.plusMinutes(minutes);
-        appointment.setEndTime(endTime);
-        appointment.setStatus("Confirmed");
-        return appointment;
-    }
-
-    public static void showDoctorAvailabilitySchedule(String doctorName, ArrayList<Object> appointmentList) {
-        ArrayList<Object> filter = new ArrayList<>();
-        for (Object obj : appointmentList) {
-            if (!((Appointment) obj).getStatus().equals("Cancelled")) {
-                filter.add(obj);
-            }
-        }
-        LocalDate today = LocalDate.now().with(TemporalAdjusters.nextOrSame(DayOfWeek.SATURDAY));
-        today.with(TemporalAdjusters.nextOrSame(DayOfWeek.MONDAY));
-        String[] days = { "Mon (" + today.with(TemporalAdjusters.nextOrSame(DayOfWeek.MONDAY)) + ")",
-                "Tue (" + today.with(TemporalAdjusters.nextOrSame(DayOfWeek.TUESDAY)) + ")",
-                "Wed (" + today.with(TemporalAdjusters.nextOrSame(DayOfWeek.WEDNESDAY)) + ")",
-                "Thu (" + today.with(TemporalAdjusters.nextOrSame(DayOfWeek.THURSDAY)) + ")",
-                "Fri (" + today.with(TemporalAdjusters.nextOrSame(DayOfWeek.FRIDAY)) + ")" };
-
-        for (int i = 0; i < days.length; i++) {
-            System.out.print(days[i] + "\t");
-            String[] times = { "09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "13:00", "13:30", "14:00", "14:30",
-                    "15:00", "15:30" };
-            for (int j = 0; j < times.length; j++) {
-                for (Object obj : filter) {
-                    if (((Appointment) obj).getDate().getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.ENGLISH)
-                            .equals(days[i].substring(0, 3))) {
-                        if ((((Appointment) obj).getStartTime().isBefore(LocalTime.parse(times[j]))
-                                || (((Appointment) obj).getStartTime()).equals(LocalTime.parse(times[j])))
-                                && ((((Appointment) obj).getEndTime()).equals(LocalTime.parse(times[j]))
-                                        || (((Appointment) obj).getEndTime()).isAfter(LocalTime.parse(times[j])))) {
-                            times[j] = "     ";
-                        }
-                    }
-                }
-            }
-            for (int timesCounter = 0; timesCounter < times.length; timesCounter++) {
-                System.out.print(times[timesCounter] + "    ");
-            }
-            System.out.println();
-        }
     }
 }
