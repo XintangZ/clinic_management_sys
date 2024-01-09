@@ -1,5 +1,6 @@
 package src.utils;
 
+import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -48,7 +49,7 @@ public abstract class InputValidator {
      * gets a String from user input
      * 
      * @return a String from user input
-     * @throws Exception when the user inputs nothing other than white spaces
+     * @throws Exception if the user inputs nothing other than white spaces
      */
     public String getString() throws Exception {
         String str = this.scanner.nextLine().trim();
@@ -62,7 +63,7 @@ public abstract class InputValidator {
      * gets a non-negative number from user input
      *  
      * @return an int entered by the user
-     * @throws Exception when the user input is not a number or is less than 0
+     * @throws Exception if the user input is not a number or is less than 0
      */
     public int getPositiveInt() throws Exception {
         int num = scanner.nextInt();
@@ -83,7 +84,7 @@ public abstract class InputValidator {
      * (Cases are ignored.)
      * 
      * @return a boolean, the value of which is determined by the user input
-     * @throws Exception when the user input is invalid
+     * @throws Exception if the user input is invalid
      */
     public boolean getResponse(String closedQuestion) throws Exception {
         boolean response;
@@ -104,6 +105,26 @@ public abstract class InputValidator {
         return response;
     } // end method promptForResponse
 
+    public int chooseFromList(ArrayList<String> list) throws Exception {
+        String input;
+        System.out.printf("Choose one of the following options (enter a number): %n%n");
+
+        int index = 0;
+        for (String option : list) {
+            System.out.printf("%3d. %s %n", ++index, option);
+        }
+        System.out.println();
+        input = this.scanner.nextLine().trim();
+
+        for (int i = 0; i < list.size(); i++) {
+            if (input.equals(String.valueOf(i + 1))) {
+                return Integer.parseInt(input);
+            }
+        }
+        throw new Exception(
+                String.format("Invalid option. Please enter a number between 1 and %d.", list.size()));
+    } // end method chooseFromList
+
     /**
      * takes a String of user input
      * and updates an attribute with the value. 
@@ -111,7 +132,7 @@ public abstract class InputValidator {
      * 
      * @param scanner a Scanner object to read user input
      * @param method a setter method to update a certain attribute
-     * @throws Exception when maxinum number of attempts reached
+     * @throws Exception if maxinum number of attempts reached
      */
     public void updateAttr(RunnableWithParam method) throws Exception {
         String input = this.scanner.nextLine();
