@@ -1,7 +1,11 @@
 package src.utils;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.*;
 
 import src.clinic.Appointment;
+import src.clinic.Schedule;
 import src.clinic.Treatment;
 import src.person.Doctor;
 import src.person.Patient;
@@ -176,7 +180,7 @@ public class User extends InputValidator {
      * @return an Appointment object
      * @throws Exception if maxinum number of attempts reached
      */
-    public Appointment createAppointment(String patientName, String doctorName) throws Exception {
+    public Appointment createAppointment(ArrayList<Appointment> doctorAppointments, String patientName, String doctorName) throws Exception {
         Appointment appointment = new Appointment();
 
         appointment.setPatientName(patientName);
@@ -187,13 +191,17 @@ public class User extends InputValidator {
             appointment.setDate(getString());
         }, attempts);
 
-        String[] menuTimes = {"09:00", "10:00", "11:00", "13:00", "14:00", "15:00"};    // TODO: validate time availability
-        ArrayList<String> menu = new ArrayList<>();
-        for (String item : menuTimes) {
-            menu.add(item);
+        String[] timeSlots = { "09:00", "10:00", "11:00", "13:00", "14:00", "15:00" };
+        ArrayList<String> availableTimeSlots = new ArrayList<>();
+
+        for (String time : timeSlots) {
+            if (Schedule.checkAvailability(doctorAppointments, appointment.getDate(), LocalTime.parse(time))) {
+                availableTimeSlots.add(time);
+            }
         }
-        int response = chooseFromList(menu);
-        appointment.setStartTime(menuTimes[response - 1]);
+
+        Menu timsSlots = new Menu("available time slots", availableTimeSlots);
+        appointment.setStartTime(timsSlots.getChosenOption());
 
         System.out.print("Description: ");
         limitAttempts(() -> {
@@ -243,14 +251,21 @@ public class User extends InputValidator {
      */
     public Treatment searchForTreatment(ArrayList<Object> arrayList) throws Exception { 
         String[] name = new String[2];
+        LocalDate[] issueDate = new LocalDate[1];
 
         System.out.print("Patient First Name: ");
         limitAttempts(() -> {
             name[0] = getString();
         }, attempts);
+
         System.out.print("Patient Last Name: ");
         limitAttempts(() -> {
             name[1] = getString();
+        }, attempts);
+
+        System.out.print("Issue Date (yyyy-mm-dd): ");
+        limitAttempts(() -> {
+            issueDate[1] = LocalDate.parse(getString());
         }, attempts);
 
         for (Object obj : arrayList) {
@@ -262,6 +277,96 @@ public class User extends InputValidator {
         return null;
     } // end method searchForTreatment
 
+    /**
+     * performs linear search to an ArrayList of Objects
+     * 
+     * @param arrayList an ArrayList of Objects to search from
+     * @return a Treatment object or null if no result found
+     * @throws Exception if maxinum number of attempts reached
+     */
+    public ArrayList<Object> searchForAppointment(ArrayList<Object> allAppointments) throws Exception {
+        ArrayList<Object> filteredAppointments = new ArrayList<>();
+
+        Menu filters = new Menu("choose a filter", "Doctor's Name", "Patient's Name", "Date", "Specific Appointment");
+        String chosenFilter = filters.getChosenOption();
+
+        if (chosenFilter == null) {
+            throw new Exception("");
+        }
+
+        switch (chosenFilter) {
+            case "Doctor's Name":
+                String[] doctorName = new String[1];
+
+                System.out.println("Enter Doctor's Name: ");
+                limitAttempts(() -> {
+                    doctorName[0] = getString();
+                }, attempts);
+
+                for (Object obj : allAppointments) {
+                    if (((Appointment) obj).getDoctorName().equals(doctorName[0])) {
+                        filteredAppointments.add(obj);
+                    }
+                }
+                break;
+            case "Patient's Name":
+                String[] patientName = new String[1];
+
+                System.out.println("Enter Patient's Name: ");
+                limitAttempts(() -> {
+                    patientName[0] = getString();
+                }, attempts);
+
+                for (Object obj : allAppointments) {
+                    if (((Appointment) obj).getPatientName().equals(patientName[0])) {
+                        filteredAppointments.add(obj);
+                    }
+                }
+                break;
+            case "Date":
+                LocalDate[] date = new LocalDate[1];
+
+                System.out.println("Enter Appointment Date (yyyy-mm-dd): ");
+                limitAttempts(() -> {
+                    date[0] = LocalDate.parse(getString());
+                }, attempts);
+                for (Object obj : allAppointments) {
+                    if (((Appointment) obj).getDate().equals(date[0])) {
+                        filteredAppointments.add(obj);
+                    }
+                }
+                break;
+            default:
+                LocalDate[] specificDate = new LocalDate[1];
+                LocalTime[] specificTime = new LocalTime[1];
+                String[] specificDoctorName = new String[1];
+
+                System.out.println("Enter Appointment Date (yyyy-mm-dd): ");
+                limitAttempts(() -> {
+                    specificDate[0] = LocalDate.parse(getString());
+                }, attempts);
+
+                System.out.println("Enter Appointment Time (hh:ss): ");
+                limitAttempts(() -> {
+                    specificTime[0] = LocalTime.parse(getString());
+                }, attempts);
+
+                System.out.println("Enter Doctor's Name: ");
+                limitAttempts(() -> {
+                    specificDoctorName[0] = getString();
+                }, attempts);
+
+                for (Object obj : allAppointments) {
+                    if (((Appointment) obj).getDate().equals(specificDate[0])
+                            && ((Appointment) obj).getStartTime().equals(specificTime[0])
+                            && ((Appointment) obj).getDoctorName().equals(specificDoctorName[0])) {
+                        filteredAppointments.add(obj);
+                    }
+                }
+        }
+        
+        return filteredAppointments;
+    } // end method searchForAppointment
 
     // methods to edit object attributes
     /**
@@ -366,6 +471,11 @@ public class User extends InputValidator {
 
         editPerson(patient);
 
+        System.out.print("Health Card Number: " + patient.getHealthCardNumber() + " ");
+        limitAttempts(() -> {
+            updateAttr(patient::setHealthCardNumber); // health card number
+        }, attempts);
+
         System.out.print("Allergies: " + patient.getAllergies() + " ");
         limitAttempts(() -> {
             updateAttr(patient::setAllergies); // allergies
@@ -432,6 +542,50 @@ public class User extends InputValidator {
     } // end method editTreatment
 
     /**
+     * displays the attributes of an appointmet line by line, 
+     * the user can decide if to enter a new value at the end of each line. 
+     * if no new value is entered (the user hit enter without typing anything other than spaces), no changes will be made.
+     * if the user entered a new value, updates the coresponding property
+     * 
+     * @param treatment the Appointment object to be modified
+     * @throws Exception if maxinum number of attempts reached
+     */
+    public void editAppointment(Appointment appointment) throws Exception {
+        System.out.println("======= EDIT APPOINTMENT INFO =======");
+        System.out.println("Input new information if needed, or skip a field by pressing the enter key.");
+
+        System.out.print("Date: " + appointment.getDate() + " ");
+        limitAttempts(() -> {
+            updateAttr(appointment::setDate); // date
+        }, attempts);
+
+        System.out.print("Start Time: " + appointment.getStartTime() + " ");
+        limitAttempts(() -> {
+            updateAttr(appointment::setStartTime); // start time
+        }, attempts);
+
+        System.out.print("Doctor Name: " + appointment.getDoctorName() + " ");
+        limitAttempts(() -> {
+            updateAttr(appointment::setDoctorName); // doctor name
+        }, attempts);
+
+        System.out.print("Patient Name: " + appointment.getPatientName() + " ");
+        limitAttempts(() -> {
+            updateAttr(appointment::setPatientName); // petient name
+        }, attempts);
+
+        System.out.print("Description: " + appointment.getDescription() + " ");
+        limitAttempts(() -> {
+            updateAttr(appointment::setDescription); // description
+        }, attempts);
+
+        System.out.print("Status: " + appointment.getStatus() + " ");
+        limitAttempts(() -> {
+            updateAttr(appointment::setStatus); // status
+        }, attempts);
+    } // end method editAppointment
+
+    /**
      * prints all objects from an ArrayList
      * 
      * @param <T> a generic type
@@ -442,7 +596,6 @@ public class User extends InputValidator {
         if (objects.isEmpty()) {
             System.out.println("No record.");
         } else {
-            System.out.println(String.format("======= ALL %sS =======", type.getSimpleName().toUpperCase()));
             int index = 1;
             for (Object obj : objects) {
                 System.out.printf("------- %s %d ------- %n", type.getSimpleName(), index++);
