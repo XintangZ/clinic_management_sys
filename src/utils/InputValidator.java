@@ -1,6 +1,5 @@
 package src.utils;
 
-import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -104,26 +103,6 @@ public abstract class InputValidator {
 
         return response;
     } // end method promptForResponse
-
-    public int chooseFromList(ArrayList<String> list) throws Exception {
-        String input;
-        System.out.printf("Choose one of the following options (enter a number): %n%n");
-
-        int index = 0;
-        for (String option : list) {
-            System.out.printf("%3d. %s %n", ++index, option);
-        }
-        System.out.println();
-        input = this.scanner.nextLine().trim();
-
-        for (int i = 0; i < list.size(); i++) {
-            if (input.equals(String.valueOf(i + 1))) {
-                return Integer.parseInt(input);
-            }
-        }
-        throw new Exception(
-                String.format("Invalid option. Please enter a number between 1 and %d.", list.size()));
-    } // end method chooseFromList
 
     /**
      * takes a String of user input
