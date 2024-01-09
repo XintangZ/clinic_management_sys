@@ -45,7 +45,7 @@ public class Menu extends InputValidator {
      * gets user choice from the menu
      * 
      * @return a String of the number which the user chose
-     * @throws Exception when the user input dose not match any menu option number
+     * @throws Exception if the user input dose not match any menu option number
      */
     public String getUserChoice() throws Exception {
         String userChoice = scanner.nextLine().trim();
