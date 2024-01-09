@@ -55,7 +55,7 @@ public abstract class Employee extends Person {
      * sets the employed date of the employee
      * 
      * @param dateToParse String
-     * @throws Exception
+     * @throws Exception if failed to parse the String to LocalDate
      */
     public void setDateOfEmployment(String dateToParse) throws Exception {
         LocalDate dateOfEmployment;
@@ -71,7 +71,7 @@ public abstract class Employee extends Person {
      * sets the employed date of the employee
      * 
      * @param dateOfEmployment
-     * @throws Exception
+     * @throws Exception if the date is a future date
      */
     public void setDateOfEmployment(LocalDate dateOfEmployment) throws Exception {
         if (dateOfEmployment.isAfter(LocalDate.now())) {

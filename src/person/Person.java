@@ -78,7 +78,7 @@ public abstract class Person implements Serializable {
      * sets the date of birth of the person
      * 
      * @param dateToParse String
-     * @throws Exception
+     * @throws Exception if failed to parse the String to LocalDate
      */
     public void setDateOfBirth(String dateToParse) throws Exception {
         LocalDate dateOfBirth;
@@ -94,7 +94,7 @@ public abstract class Person implements Serializable {
      * sets the date of birth of the person
      * 
      * @param dateOfBirth LocalDate
-     * @throws Exception
+     * @throws Exception if the date is a future date
      */
     public void setDateOfBirth(LocalDate dateOfBirth) throws Exception {
         if (dateOfBirth.isAfter(LocalDate.now())) {

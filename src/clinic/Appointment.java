@@ -56,7 +56,7 @@ public class Appointment implements Serializable {
      * sets the date of the appointment
      * 
      * @param dateToParse String
-     * @throws Exception
+     * @throws Exception if failed to parse the String to LocalDate
      */
     public void setDate(String dateToParse) throws Exception {
         LocalDate date;
@@ -72,7 +72,7 @@ public class Appointment implements Serializable {
      * sets the date of the appointment
      * 
      * @param date LocalDate
-     * @throws Exception
+     * @throws Exception if the date is a past date
      */
     public void setDate(LocalDate date) throws Exception {
         if (!date.isAfter(creationDate)) {
@@ -85,7 +85,7 @@ public class Appointment implements Serializable {
      * sets the start time of the appointment
      * 
      * @param timeToParse String
-     * @throws Exception
+     * @throws Exception if failed to parse the String to LocalTime
      */
     public void setStartTime(String timeToParse) throws Exception {
         LocalTime time;
@@ -101,7 +101,7 @@ public class Appointment implements Serializable {
      * sets the start time of the appointment
      * 
      * @param startTime LocalTime
-     * @throws Exception
+     * @throws Exception if the time is a past time
      */
     public void setStartTime(LocalTime startTime) throws Exception {
         if (this.appointmentDate.equals(this.creationDate) && startTime.isBefore(LocalTime.now())) {

@@ -86,7 +86,7 @@ public class Patient extends Person {
      * sets the insurance covered percentage of the patient
      * 
      * @param percentageToParse String
-     * @throws Exception
+     * @throws Exception is the String contains non-digits
      */
     public void setCoveredPercentage(String percentageToParse) throws Exception {
         if (!percentageToParse.matches("\\d+")) {
@@ -101,7 +101,7 @@ public class Patient extends Person {
      * sets the insurance covered percentage of the patient
      * 
      * @param theCoveredPercentage int
-     * @throws Exception
+     * @throws Exception if the int is greater than 100
      */
     public void setCoveredPercentage(int theCoveredPercentage) throws Exception {
         if (theCoveredPercentage > 100) {
