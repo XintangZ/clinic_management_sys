@@ -29,7 +29,7 @@ public class User extends InputValidator {
      * by prompting the user to enter attributes in the terminal
      * 
      * @param person a Person object to add attributes to
-     * @throws Exception when maxinum number of attempts reached
+     * @throws Exception if maxinum number of attempts reached
      */
     public void setPersonalInfo(Person person) throws Exception {
         System.out.print("First Name: ");
@@ -68,17 +68,20 @@ public class User extends InputValidator {
      * by prompting the user to enter attributes in the terminal
      * 
      * @return a Doctor object
-     * @throws Exception when maxinum number of attempts reached
+     * @throws Exception if maxinum number of attempts reached
      */
     public Doctor createDoctor() throws Exception {
         Doctor doctor = new Doctor();
         setPersonalInfo(doctor);
 
-        // TODO: sin number
-
         System.out.print("Date of Employment: ");
         limitAttempts(() -> {
             doctor.setDateOfEmployment(getString());
+        }, attempts);
+
+        System.out.print("SIN Number: ");
+        limitAttempts(() -> {
+            doctor.setSinNumber(getString());
         }, attempts);
 
         System.out.print("Specialty: ");
@@ -94,7 +97,7 @@ public class User extends InputValidator {
      * by prompting the user to enter attributes in the terminal
      * 
      * @return a Patient object
-     * @throws Exception when maxinum number of attempts reached
+     * @throws Exception if maxinum number of attempts reached
      */
     public Patient createPatient() throws Exception {
         Patient patient = new Patient();
@@ -128,7 +131,7 @@ public class User extends InputValidator {
      * by prompting the user to enter attributes in the terminal
      * 
      * @return a Treatment object
-     * @throws Exception when maxinum number of attempts reached
+     * @throws Exception if maxinum number of attempts reached
      */
     public Treatment createTreatment() throws Exception {
         Treatment treatment = new Treatment();
@@ -171,24 +174,34 @@ public class User extends InputValidator {
      * by prompting the user to enter attributes in the terminal
      * 
      * @return an Appointment object
-     * @throws Exception when maxinum number of attempts reached
+     * @throws Exception if maxinum number of attempts reached
      */
-    public static Appointment createAppointment(String patientName, String doctorName) throws Exception {
+    public Appointment createAppointment(String patientName, String doctorName) throws Exception {
         Appointment appointment = new Appointment();
-        Scanner scanner = new Scanner(System.in);
-        // ArrayList<Object> appointmentList = ObjectIO.loadData(ObjectIO.APPOINTMENT_FILE_PATH);
+
         appointment.setPatientName(patientName);
         appointment.setDoctorName(doctorName);
+
         System.out.print("Appointment Date: ");
-        appointment.setDate(scanner.next());
-        String[] menuTimes = {"09:00", "10:00", "11:00", "13:00", "14:00", "15:00"};
+        limitAttempts(() -> {
+            appointment.setDate(getString());
+        }, attempts);
+
+        String[] menuTimes = {"09:00", "10:00", "11:00", "13:00", "14:00", "15:00"};    // TODO: validate time availability
         ArrayList<String> menu = new ArrayList<>();
         for (String item : menuTimes) {
             menu.add(item);
         }
-        int response = UserInteraction.chooseFromMenu(scanner, menu);
-        appointment.setStartTime(menuTimes[response-1]);
+        int response = chooseFromList(menu);
+        appointment.setStartTime(menuTimes[response - 1]);
+
+        System.out.print("Description: ");
+        limitAttempts(() -> {
+            appointment.setDescription(getString());
+        }, attempts);
+
         appointment.setStatus("Confirmed");
+
         return appointment;
     }
 
@@ -198,7 +211,7 @@ public class User extends InputValidator {
      * 
      * @param arrayList an ArrayList of Objects to search from
      * @return a Person object or null if no result found
-     * @throws Exception when maxinum number of attempts reached
+     * @throws Exception if maxinum number of attempts reached
      */
     public Person searchForPerson(ArrayList<Object> arrayList) throws Exception {
         String[] name = new String[2];
@@ -226,7 +239,7 @@ public class User extends InputValidator {
      * 
      * @param arrayList an ArrayList of Objects to search from
      * @return a Treatment object or null if no result found
-     * @throws Exception when maxinum number of attempts reached
+     * @throws Exception if maxinum number of attempts reached
      */
     public Treatment searchForTreatment(ArrayList<Object> arrayList) throws Exception { 
         String[] name = new String[2];
@@ -257,7 +270,7 @@ public class User extends InputValidator {
      * if the input is blank (contains nothing other than white spaces), no change will be made
      * 
      * @param method a setter method to update a certain attribute
-     * @throws Exception when maxinum number of attempts reached
+     * @throws Exception if maxinum number of attempts reached
      */
     public void updateAttr(RunnableWithParam method) throws Exception {
         String input = this.scanner.nextLine();
@@ -273,7 +286,7 @@ public class User extends InputValidator {
      * if the user entered a new value, updates the coresponding property
      * 
      * @param person the Person object to be modified
-     * @throws Exception when maxinum number of attempts reached
+     * @throws Exception if maxinum number of attempts reached
      */
     public void editPerson(Person person) throws Exception {
         System.out.print("First Name: " + person.getFirstName() + " ");
@@ -314,7 +327,7 @@ public class User extends InputValidator {
      * if the user entered a new value, updates the coresponding property
      * 
      * @param doctor the Doctor object to be modified
-     * @throws Exception when maxinum number of attempts reached
+     * @throws Exception if maxinum number of attempts reached
      */
     public void editDoctor(Doctor doctor) throws Exception {
         System.out.println("======= EDIT DOCTOR INFO =======");
@@ -322,11 +335,14 @@ public class User extends InputValidator {
 
         editPerson(doctor);
 
-        // TODO: sin number
-
         System.out.print("Date of Employment: " + doctor.getDateOfEmployment() + " ");
         limitAttempts(() -> {
             updateAttr(doctor::setDateOfEmployment); // date of employment
+        }, attempts);
+
+        System.out.print("SIN Number: " + doctor.getSinNumber() + " ");
+        limitAttempts(() -> {
+            updateAttr(doctor::setSinNumber); // date of employment
         }, attempts);
 
         System.out.print("Specialty: " + doctor.getSpecialty() + " ");
@@ -342,7 +358,7 @@ public class User extends InputValidator {
      * if the user entered a new value, updates the coresponding property
      * 
      * @param patient the Patient object to be modified
-     * @throws Exception when maxinum number of attempts reached
+     * @throws Exception if maxinum number of attempts reached
      */
     public void editPatient(Patient patient) throws Exception {
         System.out.println("======= EDIT PATIENT INFO =======");
@@ -378,7 +394,7 @@ public class User extends InputValidator {
      * if the user entered a new value, updates the coresponding property
      * 
      * @param treatment the Treatment object to be modified
-     * @throws Exception when maxinum number of attempts reached
+     * @throws Exception if maxinum number of attempts reached
      */
     public void editTreatment(Treatment treatment) throws Exception {
         System.out.println("======= EDIT TREATMENT INFO =======");
