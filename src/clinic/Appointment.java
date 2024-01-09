@@ -26,18 +26,18 @@ public class Appointment implements Serializable {
         this.creationDate = LocalDate.now();
     }
     
-    // TODO: add description
-    public Appointment(LocalDate appointmentDate, LocalTime startTime, String patientName, String doctorName, String status) throws Exception {
-        setAppointment(appointmentDate, startTime, patientName, doctorName, status);
+    public Appointment(LocalDate appointmentDate, LocalTime startTime, String patientName, String doctorName, String status, String description) throws Exception {
+        setAppointment(appointmentDate, startTime, patientName, doctorName, status, description);
     }
     
     public void setAppointment(LocalDate appointmentDate, LocalTime startTime, String patientName,
-            String doctorName, String status) throws Exception { // same as edit appointment
+            String doctorName, String status, String description) throws Exception { // same as edit appointment
         setDate(appointmentDate);
         setStartTime(startTime);
         setPatientName(patientName);
         setDoctorName(doctorName);
         setStatus(status);
+        setDescription(description);
     }
 
     /**
@@ -92,6 +92,10 @@ public class Appointment implements Serializable {
         this.status = status;
     }
 
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public LocalDate getDate() {
         return this.appointmentDate;
     }
@@ -116,14 +120,19 @@ public class Appointment implements Serializable {
         return this.status;
     }
 
-    @Override   // TODO: add description
+    public String getDescription() {
+        return this.description;
+    }
+
+    @Override
     public String toString() {
-        return String.format("%s: %s%n%s: %s%n%s: %s%n%s: %s%n%s: %s%n%s: %s%n",
+        return String.format("%s: %s%n%s: %s%n%s: %s%n%s: %s%n%s: %s%n%s: %s%n%s: %s%n",
         "Date", getDate().toString(),
         "Start Time", getStartTime().toString(),
         "End Time", getEndTime().toString(),
         "Doctor Name", getDoctorName(),
         "Patient Name", getPatientName(),
+        "Description", getDescription(),
         "Status", getStatus()
         );
     }

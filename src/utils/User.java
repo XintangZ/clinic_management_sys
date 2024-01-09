@@ -1,6 +1,5 @@
 package src.utils;
-
-import java.util.ArrayList;
+import java.util.*;
 
 import src.clinic.Appointment;
 import src.clinic.Treatment;
@@ -174,11 +173,22 @@ public class User extends InputValidator {
      * @return an Appointment object
      * @throws Exception when maxinum number of attempts reached
      */
-    public Appointment createAppointment() {
+    public static Appointment createAppointment(String patientName, String doctorName) throws Exception {
         Appointment appointment = new Appointment();
-
-        // TODO: add your logic here
-        
+        Scanner scanner = new Scanner(System.in);
+        // ArrayList<Object> appointmentList = ObjectIO.loadData(ObjectIO.APPOINTMENT_FILE_PATH);
+        appointment.setPatientName(patientName);
+        appointment.setDoctorName(doctorName);
+        System.out.print("Appointment Date: ");
+        appointment.setDate(scanner.next());
+        String[] menuTimes = {"09:00", "10:00", "11:00", "13:00", "14:00", "15:00"};
+        ArrayList<String> menu = new ArrayList<>();
+        for (String item : menuTimes) {
+            menu.add(item);
+        }
+        int response = UserInteraction.chooseFromMenu(scanner, menu);
+        appointment.setStartTime(menuTimes[response-1]);
+        appointment.setStatus("Confirmed");
         return appointment;
     }
 

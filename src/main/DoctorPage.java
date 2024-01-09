@@ -113,7 +113,7 @@ public class DoctorPage extends Team6MedicalClinic {
         try {
             user.limitAttempts(() -> {
                 isToEdit[0] = user.getResponse(
-                        "Would you like to edit the doctor's information?");  // ask if the user wants to edit the found object
+                        "Would you like to edit the patient's information?");  // ask if the user wants to edit the found object
             }, 3);
         } catch (Exception e) {
             System.err.println(e.getMessage());
