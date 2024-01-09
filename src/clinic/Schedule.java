@@ -100,14 +100,14 @@ public interface Schedule {
     /**
      * gets all appointments for a certain doctor
      * 
-     * @param appointmentList an ArrayList of Object containing all appointments
+     * @param allAppointments an ArrayList of Object containing all appointments
      * @param doctor the doctor to check
      * @return an ArrayList of Appointment for the specified doctor
      */
-    static ArrayList<Appointment> getDoctorAppointments(ArrayList<Appointment> appointmentList, String doctorName) {
+    static ArrayList<Appointment> getDoctorAppointments(ArrayList<Appointment> allAppointments, String doctorName) {
         ArrayList<Appointment> doctorAppointments = new ArrayList<>();
 
-        for (Object obj : appointmentList) {
+        for (Object obj : allAppointments) {
             Appointment appointment = (Appointment) obj;
             if (appointment.getDoctorName().equals(doctorName)) {
                 doctorAppointments.add(appointment);
@@ -139,13 +139,13 @@ public interface Schedule {
     /**
      * gets all incoming appointments
      * 
-     * @param appointmentList an ArrayList of Object containing all appointments
+     * @param allAppointments an ArrayList of Object containing all appointments
      * @return an ArrayList of Object containing the appointments from today and after
      */
-    static ArrayList<Appointment> getFutureAppointments(ArrayList<Object> appointmentList) {
+    static ArrayList<Appointment> getFutureAppointments(ArrayList<Object> allAppointments) {
         ArrayList<Appointment> futureAppointments = new ArrayList<>();
 
-        for (Object obj : appointmentList) {
+        for (Object obj : allAppointments) {
             Appointment appointment = (Appointment) obj;
             if (!appointment.getDate().isBefore(LocalDate.now())) {
                 futureAppointments.add(appointment);
