@@ -1,7 +1,5 @@
 package src.main;
 
-import java.util.ArrayList;
-
 import src.person.Doctor;
 import src.utils.Menu;
 import src.utils.ObjectIO;
@@ -16,8 +14,7 @@ import src.utils.ObjectIO;
  */
 
 public class HrPage extends Team6MedicalClinic {
-    private static Menu hrMenu = new Menu("hr","Register new doctor", "Search for a doctor", "All doctors", "Main menu");
-    private static ArrayList<Object> doctorList = ObjectIO.loadData(ObjectIO.DOCTOR_FILE_PATH);
+    private static Menu hrMenu = new Menu("hr menu","Register new doctor", "Search for a doctor", "All doctors", "Main menu");
 
     public static void main(String[] args) {
         // execute hr menu
@@ -37,15 +34,15 @@ public class HrPage extends Team6MedicalClinic {
             System.err.println(e.getMessage());
             return;
         }
-        doctorList.add(doctor);
-        ObjectIO.writeObjects(ObjectIO.DOCTOR_FILE_PATH, doctorList);
+        allDoctors.add(doctor);
+        ObjectIO.writeObjects(ObjectIO.DOCTOR_FILE_PATH, allDoctors);
     };
 
     // search doctors
     private static Runnable searchDoctors = () -> {
         Doctor result;
         try {
-            result = (Doctor) user.searchForPerson(doctorList);
+            result = (Doctor) user.searchForPerson(allDoctors);
         } catch (Exception e) {
             System.err.println(e.getMessage());
             return;
@@ -77,12 +74,13 @@ public class HrPage extends Team6MedicalClinic {
                 System.err.println(e.getMessage());
                 return;
             }
-            ObjectIO.writeObjects(ObjectIO.DOCTOR_FILE_PATH, doctorList); // write objects to data file
+            ObjectIO.writeObjects(ObjectIO.DOCTOR_FILE_PATH, allDoctors); // write objects to data file
         }
     };
     
     // display all doctors
     private static Runnable displayAllDoctors = () -> {
-        user.printAll(doctorList, Doctor.class);
+        System.out.println("======= ALL DOCTORS =======");
+        user.printAll(allDoctors, Doctor.class);
     };
 } // end class HrPage

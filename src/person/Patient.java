@@ -11,7 +11,7 @@ import java.time.LocalDate;
  */
 
 public class Patient extends Person {
-    private String allergies, insuranceCompany, policyNumber, healthCardNumber;
+    private String healthCardNumber, allergies, insuranceCompany, policyNumber;
     private double coveredPercentage;
 
     // constructor
@@ -28,21 +28,21 @@ public class Patient extends Person {
      * @param aGender String ("F" or "f" for Female, "M" or "m" for Male)
      * @param aPhoneNumber String
      * @param anAddress String
+     * @param aHealthCardNumber String
      * @param anAllergies String
      * @param anInsuranceCompany String
      * @param aPolicyNumber String
-     * @param aHealthCardNumber String
      * @param aCoveredPercentage int
      * @throws Exception
      */
     public Patient(String aFirstName, String aLastName, LocalDate aDateOfBirth, String aGender, String aPhoneNumber,
-            String anAddress, String anAllergies, String anInsuranceCompany, String aPolicyNumber,
-            String aHealthCardNumber, int aCoveredPercentage) throws Exception {
+            String anAddress, String aHealthCardNumber, String anAllergies, String anInsuranceCompany, String aPolicyNumber,
+            int aCoveredPercentage) throws Exception {
         super(aFirstName, aLastName, aDateOfBirth, aGender, aPhoneNumber, anAddress);
+        setHealthCardNumber(aHealthCardNumber);
         setAllergies(anAllergies);
         setInsuranceCompany(anInsuranceCompany);
         setPolicyNumber(aPolicyNumber);
-        setHealthCardNumber(aHealthCardNumber);
         setCoveredPercentage(aCoveredPercentage);
     } // end constructor with params
 
@@ -158,10 +158,10 @@ public class Patient extends Person {
     // return string representation of patient object 
     @Override
     public String toString() {
-        return super.toString() + "Allergies: " + getAllergies()
-        + "\nInsurance company: " + getInsuranceCompany()
-        + "\nPolicy number: " + getPolicyNumber()
-        + "\nHealth card number: " + getHealthCardNumber()
-        + "\nCovered percentage: " + getCoveredPercentage() * 100 + "%";
+        return super.toString() + "Health card number: " + getHealthCardNumber() 
+        + "\nAllergies: " + getAllergies() 
+        + "\nInsurance company: " + getInsuranceCompany() 
+        + "\nPolicy number: " + getPolicyNumber() 
+        + "\nCovered percentage: " + getCoveredPercentage() * 100 + "%"; 
     } // end method toString
 } // end class Patient
