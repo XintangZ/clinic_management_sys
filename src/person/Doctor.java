@@ -29,12 +29,13 @@ public class Doctor extends Employee {
      * @param phoneNumber String
      * @param address String
      * @param dateOfEmployment LocalDate
+     * @param sinNumber String
      * @param specialty String
      * @throws Exception
      */
     public Doctor(String firstName, String lastName, LocalDate dateOfBirth, String gender, String phoneNumber,
-    String address, LocalDate dateOfEmployment, String specialty) throws Exception {
-        super(firstName, lastName, dateOfBirth, gender, phoneNumber, address, dateOfEmployment);
+    String address, LocalDate dateOfEmployment, String sinNumber, String specialty) throws Exception {
+        super(firstName, lastName, dateOfBirth, gender, phoneNumber, address, dateOfEmployment, sinNumber);
         setSpecialty(specialty);
     } // end constructor with params
 
@@ -63,4 +64,4 @@ public class Doctor extends Employee {
     public String toString() {
         return super.toString() + String.format("Specialty: %s %n", getSpecialty());
     } // end method toString
-}
+} // end class Doctor

@@ -48,7 +48,7 @@ public abstract class InputValidator {
      * gets a String from user input
      * 
      * @return a String from user input
-     * @throws Exception when the user inputs nothing other than white spaces
+     * @throws Exception if the user inputs nothing other than white spaces
      */
     public String getString() throws Exception {
         String str = this.scanner.nextLine().trim();
@@ -62,7 +62,7 @@ public abstract class InputValidator {
      * gets a non-negative number from user input
      *  
      * @return an int entered by the user
-     * @throws Exception when the user input is not a number or is less than 0
+     * @throws Exception if the user input is not a number or is less than 0
      */
     public int getPositiveInt() throws Exception {
         int num = scanner.nextInt();
@@ -83,7 +83,7 @@ public abstract class InputValidator {
      * (Cases are ignored.)
      * 
      * @return a boolean, the value of which is determined by the user input
-     * @throws Exception when the user input is invalid
+     * @throws Exception if the user input is invalid
      */
     public boolean getResponse(String closedQuestion) throws Exception {
         boolean response;
@@ -111,7 +111,7 @@ public abstract class InputValidator {
      * 
      * @param scanner a Scanner object to read user input
      * @param method a setter method to update a certain attribute
-     * @throws Exception when maxinum number of attempts reached
+     * @throws Exception if maxinum number of attempts reached
      */
     public void updateAttr(RunnableWithParam method) throws Exception {
         String input = this.scanner.nextLine();

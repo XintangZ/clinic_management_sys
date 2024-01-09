@@ -31,23 +31,31 @@ public abstract class Employee extends Person {
      * @param phoneNumber String
      * @param address String
      * @param dateOfEmployment LocalDate
+     * @param sinNumber String
      * @throws Exception
      */
-    public Employee(String firstName, String lastName, LocalDate dateOfBirth, String gender, String phoneNumber,    // TODO: add sin number
-            String address, LocalDate dateOfEmployment) throws Exception {
+    public Employee(String firstName, String lastName, LocalDate dateOfBirth, String gender, String phoneNumber,  
+            String address, LocalDate dateOfEmployment, String sinNumber) throws Exception {
         super(firstName, lastName, dateOfBirth, gender, phoneNumber, address);
         setDateOfEmployment(dateOfEmployment);
+        setSinNumber(sinNumber);
     }
 
     // setter methods 
-
-    // TODO: set sin number
+    /**
+     * sets the sin number of the employee
+     * 
+     * @param theSinNumber String
+     */
+	public void setSinNumber(String sinNumber){
+		this.sinNumber = sinNumber;
+	} // end method setSinNumber
 
     /**
      * sets the employed date of the employee
      * 
      * @param dateToParse String
-     * @throws Exception
+     * @throws Exception if failed to parse the String to LocalDate
      */
     public void setDateOfEmployment(String dateToParse) throws Exception {
         LocalDate dateOfEmployment;
@@ -63,7 +71,7 @@ public abstract class Employee extends Person {
      * sets the employed date of the employee
      * 
      * @param dateOfEmployment
-     * @throws Exception
+     * @throws Exception if the date is a future date
      */
     public void setDateOfEmployment(LocalDate dateOfEmployment) throws Exception {
         if (dateOfEmployment.isAfter(LocalDate.now())) {
@@ -73,8 +81,14 @@ public abstract class Employee extends Person {
     } // end method setDateOfEmployment
 
     // getter methods 
-
-    // TODO: get sin number
+    /**
+     * gets the sin number of the employee
+     * 
+     * @return String
+     */
+	public String getSinNumber() {
+		return this.sinNumber;
+	} // end method getSinNumber
 
     /**
      * gets the date of employment of the employee
@@ -88,6 +102,7 @@ public abstract class Employee extends Person {
     // return string representation of employee object 
     @Override
     public String toString() {
-        return super.toString() + String.format("Date of Employment: %s %n", getDateOfEmployment());        // TODO: add sin number
+        return super.toString()
+                + String.format("SIN Number: %s %nDate of Employment: %s %n", getSinNumber(), getDateOfEmployment()); 
     } // end method toString
-}
+} // end abstract class Employee

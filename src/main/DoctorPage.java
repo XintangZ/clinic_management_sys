@@ -1,7 +1,5 @@
 package src.main;
 
-import java.util.ArrayList;
-
 import src.clinic.Treatment;
 import src.person.Patient;
 import src.utils.Menu;
@@ -17,10 +15,8 @@ import src.utils.ObjectIO;
  */
 
 public class DoctorPage extends Team6MedicalClinic {
-    private static Menu doctorMenu = new Menu("doctor", "Create new treatment", "Search for a treatment", "All treatments",
+    private static Menu doctorMenu = new Menu("doctor menu", "Create new treatment", "Search for a treatment", "All treatments",
             "Search for a patient", "All patients", "Main menu");
-    private static ArrayList<Object> patientList = ObjectIO.loadData(ObjectIO.PATIENT_FILE_PATH);
-    private static ArrayList<Object> treatmentList = ObjectIO.loadData(ObjectIO.TREATMENT_FILE_PATH);
 
     public static void main(String[] args) {
         // execute doctor menu
@@ -41,16 +37,15 @@ public class DoctorPage extends Team6MedicalClinic {
             System.err.println(e.getMessage());
             return;
         }
-        treatmentList.add(newTreatment);
-        ObjectIO.writeObjects(ObjectIO.TREATMENT_FILE_PATH, treatmentList);
+        allTreatments.add(newTreatment);
+        ObjectIO.writeObjects(ObjectIO.TREATMENT_FILE_PATH, allTreatments);
     };
 
     // search treatments
-    // TODO: modify searching algorithm
     private static Runnable searchTreatments = () -> {
         Treatment result;
         try {
-            result = (Treatment) user.searchForTreatment(treatmentList);
+            result = (Treatment) user.searchForTreatment(allTreatments);
         } catch (Exception e) {
             System.err.println(e.getMessage());
             return;
@@ -82,20 +77,21 @@ public class DoctorPage extends Team6MedicalClinic {
                 System.err.println(e.getMessage());
                 return;
             }
-            ObjectIO.writeObjects(ObjectIO.TREATMENT_FILE_PATH, treatmentList); // write objects to data file
+            ObjectIO.writeObjects(ObjectIO.TREATMENT_FILE_PATH, allTreatments); // write objects to data file
         }
     };
 
     // display all treatments
     private static Runnable displayAllTreatments = () -> {
-        user.printAll(treatmentList, Treatment.class);
+        System.out.println("======= ALL TREATMENTS =======");
+        user.printAll(allTreatments, Treatment.class);
     };
 
     // search patients
     public static Runnable searchPatients = () -> {
         Patient result;
         try {
-            result = (Patient) user.searchForPerson(patientList);
+            result = (Patient) user.searchForPerson(allPatients);
         } catch (Exception e) {
             System.err.println(e.getMessage());
             return;
@@ -127,12 +123,13 @@ public class DoctorPage extends Team6MedicalClinic {
                 System.err.println(e.getMessage());
                 return;
             }
-            ObjectIO.writeObjects(ObjectIO.PATIENT_FILE_PATH, patientList); // write objects to data file
+            ObjectIO.writeObjects(ObjectIO.PATIENT_FILE_PATH, allPatients); // write objects to data file
         }
     };
     
     // display all patients
     public static Runnable displayAllPatients = () -> {
-        user.printAll(patientList, Patient.class);
+        System.out.println("======= ALL PATIENTS =======");
+        user.printAll(allPatients, Patient.class);
     };
 }

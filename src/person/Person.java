@@ -30,7 +30,7 @@ public abstract class Person implements Serializable {
      * @param firstName String
      * @param lastName String
      * @param dateOfBirth LocalDate
-     * @param String String ("F" or "f" for Female, "M" or "m" for Male)
+     * @param gender String ("F" or "f" for Female, "M" or "m" for Male)
      * @param phoneNumber String
      * @param address String
      * @throws Exception
@@ -78,7 +78,7 @@ public abstract class Person implements Serializable {
      * sets the date of birth of the person
      * 
      * @param dateToParse String
-     * @throws Exception
+     * @throws Exception if failed to parse the String to LocalDate
      */
     public void setDateOfBirth(String dateToParse) throws Exception {
         LocalDate dateOfBirth;
@@ -94,7 +94,7 @@ public abstract class Person implements Serializable {
      * sets the date of birth of the person
      * 
      * @param dateOfBirth LocalDate
-     * @throws Exception
+     * @throws Exception if the date is a future date
      */
     public void setDateOfBirth(LocalDate dateOfBirth) throws Exception {
         if (dateOfBirth.isAfter(LocalDate.now())) {
@@ -125,8 +125,12 @@ public abstract class Person implements Serializable {
      * sets the phone number of the person
      * 
      * @param phoneNumber String
+     * @throws Exception if the phone number does not match the format xxx-xxx-xxxx
      */
-    public void setPhoneNumber(String phoneNumber) {
+    public void setPhoneNumber(String phoneNumber) throws Exception {
+        if (!phoneNumber.matches("[2-9][0-9]{2}-[0-9]{3}-[0-9]{4}")) {
+            throw new Exception("Invalid input. Phone number must be all digits in format \"xxx-xxx-xxxx\".");
+        }
         this.phoneNumber = phoneNumber;
     } // end method setPhoneNumber
 
@@ -219,4 +223,4 @@ public abstract class Person implements Serializable {
         return String.format("Name: %s %nDate of Birth: %s %nAge: %d %nGender: %s %nPhone Number: %s %nAddress: %s %n",
                             getName(), getDateOfBirth(), getAge(), getGender(), getPhoneNumber(), getAddress());
     } // end method toString
-}
+} // end abstract class Person

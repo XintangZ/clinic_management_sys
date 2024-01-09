@@ -29,9 +29,12 @@ public class Treatment implements Serializable {
      * @param description String
      * @param startDate LocalDate
      * @param endDate LocalDate
-     * @throws Exception when a string is blank, or when start date is a past date, or when end date is before start date
+     * @throws Exception
      */
-    public Treatment(String doctorName, String patientName, String medication, String description, LocalDate startDate, LocalDate endDate) throws Exception {
+    public Treatment(String doctorName, String patientName, String medication, String description, LocalDate startDate,
+            LocalDate endDate) throws Exception {
+        setDoctorName(doctorName);
+        setPatientName(patientName);
         setMedication(medication);
         setDescription(description);
         setIssueDate();
@@ -87,7 +90,7 @@ public class Treatment implements Serializable {
      * sets the start date of the treatment
      * 
      * @param dateToParse String
-     * @throws Exception
+     * @throws Exception if failed to parse the String to LocalDate
      */
     public void setStartDate(String dateToParse) throws Exception {
         LocalDate startDate;
@@ -103,7 +106,7 @@ public class Treatment implements Serializable {
      * sets the start date of the treatment
      * 
      * @param startDate LocalDate
-     * @throws Exception when the date is a past date
+     * @throws Exception if the date is a past date
      */
     public void setStartDate(LocalDate startDate) throws Exception {
         if (startDate.isBefore(issueDate)) {
@@ -116,7 +119,7 @@ public class Treatment implements Serializable {
      * sets the end date of the treatment
      * 
      * @param dateToParse String
-     * @throws Exception
+     * @throws Exception if failed to parse the String to LocalDate
      */
     public void setEndDate(String dateToParse) throws Exception {
         LocalDate endDate;
@@ -132,7 +135,7 @@ public class Treatment implements Serializable {
      * sets the end date of the treatment
      * 
      * @param endDate LocalDate
-     * @throws Exception when the date is before start date
+     * @throws Exception if the date is before start date
      */
     public void setEndDate(LocalDate endDate) throws Exception {
         if (endDate.isBefore(startDate)) {
@@ -211,4 +214,4 @@ public class Treatment implements Serializable {
         return String.format("Doctor Name: %s %nPatient Name: %s %nMedication: %s %nDescription: %s %nIssue Date: %s %nStart Date: %s %nEnd date: %s %n",
                                 getDoctorName(), getPatientName(), getMedication(), getDescription(), getIssueDate(), getStartDate(), getEndDate());
     } // end method toString
-}
+} // end class Treatment
