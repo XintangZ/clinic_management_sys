@@ -31,7 +31,10 @@ public class Treatment implements Serializable {
      * @param endDate LocalDate
      * @throws Exception
      */
-    public Treatment(String doctorName, String patientName, String medication, String description, LocalDate startDate, LocalDate endDate) throws Exception {
+    public Treatment(String doctorName, String patientName, String medication, String description, LocalDate startDate,
+            LocalDate endDate) throws Exception {
+        setDoctorName(doctorName);
+        setPatientName(patientName);
         setMedication(medication);
         setDescription(description);
         setIssueDate();
