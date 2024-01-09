@@ -30,10 +30,24 @@ public class Menu extends InputValidator {
     } // end constructor
 
     /**
+     * constructor
+     * 
+     * @param menuOptions an ArrayList of Strings of menu options to be displayed
+     */
+    public Menu(String menuHeader, ArrayList<String> menuOptions) {
+        super();
+        this.menuHeader = menuHeader;
+        this.menuOptions = menuOptions;
+    } // end constructor
+
+    /**
      * prints each menu option in a new line 
      * with a number at the beginning of each line for the user to choose
      */
     public void displayOptions() {
+        System.out.printf("%n======= %s ======= %n%n", this.menuHeader.toUpperCase());
+        System.out.printf("Choose one of the following options (enter a number): %n%n");
+
         int index = 0;
         for (String option : this.menuOptions) {
             System.out.printf("%3d. %s %n", ++index, option);
@@ -42,12 +56,12 @@ public class Menu extends InputValidator {
     } // end method displayOptions
 
     /**
-     * gets user choice from the menu
+     * gets the option number that user chose from the menu
      * 
      * @return a String of the number which the user chose
      * @throws Exception if the user input dose not match any menu option number
      */
-    public String getUserChoice() throws Exception {
+    public String getChosenOptionNumber() throws Exception {
         String userChoice = scanner.nextLine().trim();
         for (int i = 0; i < menuOptions.size(); i++) {
             if (userChoice.equals(String.valueOf(i + 1))) {
@@ -56,7 +70,30 @@ public class Menu extends InputValidator {
         }
         throw new Exception(
                 String.format("Invalid option. Please enter a number between 1 and %d.", this.menuOptions.size()));
-    } // end method getUserChoice
+    } // end method getChosenOptionNumber
+    
+    /**
+     * gets the option String that user chose from the menu
+     * 
+     * @return a String of the option that user choose
+     * @throws Exception if maxinum number of attempts reached
+     */
+    public String getChosenOption() throws Exception {
+        String[] userChoice = new String[1];
+        try {
+            limitAttempts(() -> {
+                // display options
+                displayOptions();
+                // get user choice
+                userChoice[0] = getChosenOptionNumber();
+            }, 3);
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            return null;
+        }
+
+        return this.menuOptions.get(Integer.valueOf(userChoice[0]) - 1);
+    } // end method getChosenOption
 
     /**
      * executes certain method base on user choice
@@ -87,11 +124,10 @@ public class Menu extends InputValidator {
             String[] userChoice = new String[1];
             try {
                 limitAttempts(() -> {
-                    System.out.printf("%n======= %s MENU ======= %n%n", this.menuHeader.toUpperCase());
                     // display main menu options
                     displayOptions();
                     // get user choice
-                    userChoice[0] = getUserChoice();
+                    userChoice[0] = getChosenOptionNumber();
                 }, 3);
             } catch (Exception e) {
                 System.err.println(e.getMessage());
