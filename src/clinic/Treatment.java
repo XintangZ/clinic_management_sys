@@ -211,4 +211,4 @@ public class Treatment implements Serializable {
         return String.format("Doctor Name: %s %nPatient Name: %s %nMedication: %s %nDescription: %s %nIssue Date: %s %nStart Date: %s %nEnd date: %s %n",
                                 getDoctorName(), getPatientName(), getMedication(), getDescription(), getIssueDate(), getStartDate(), getEndDate());
     } // end method toString
-}
+} // end class Treatment

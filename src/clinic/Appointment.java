@@ -26,9 +26,21 @@ public class Appointment implements Serializable {
         this.creationDate = LocalDate.now();
     }
     
-    public Appointment(LocalDate appointmentDate, LocalTime startTime, String patientName, String doctorName, String status, String description) throws Exception {
+    /**
+     * constructor with params
+     * 
+     * @param appointmentDate LocalDate
+     * @param startTime LocalTime
+     * @param patientName String
+     * @param doctorName String
+     * @param status String
+     * @param description String
+     * @throws Exception
+     */
+    public Appointment(LocalDate appointmentDate, LocalTime startTime, String patientName, String doctorName,
+            String status, String description) throws Exception {
         setAppointment(appointmentDate, startTime, patientName, doctorName, status, description);
-    }
+    } // end constructor with params
     
     public void setAppointment(LocalDate appointmentDate, LocalTime startTime, String patientName,
             String doctorName, String status, String description) throws Exception { // same as edit appointment
@@ -56,13 +68,25 @@ public class Appointment implements Serializable {
         setDate(date);
     } // end method setDate
 
+    /**
+     * sets the date of the appointment
+     * 
+     * @param date LocalDate
+     * @throws Exception
+     */
     public void setDate(LocalDate date) throws Exception {
-        if (date.isBefore(creationDate)) {
-            throw new Exception("Invalid date. Appointment date cannot be a past date.");
+        if (!date.isAfter(creationDate)) {
+            throw new Exception("Invalid date. Appointment date must be a future date.");
         }
         this.appointmentDate = date;
-    }
+    } // end method setDate
 
+    /**
+     * sets the start time of the appointment
+     * 
+     * @param timeToParse String
+     * @throws Exception
+     */
     public void setStartTime(String timeToParse) throws Exception {
         LocalTime time;
         try {
@@ -71,59 +95,122 @@ public class Appointment implements Serializable {
             throw new Exception("Invalid time format. Format must be \"hh:ss\".");
         }
         setStartTime(time);    
-    }
+    } // end method setStartTime
 
+    /**
+     * sets the start time of the appointment
+     * 
+     * @param startTime LocalTime
+     * @throws Exception
+     */
     public void setStartTime(LocalTime startTime) throws Exception {
         if (this.appointmentDate.equals(this.creationDate) && startTime.isBefore(LocalTime.now())) {
             throw new Exception("Invalid time. Appointment time cannot be a past time.");
         }
         this.startTime = startTime;
-    }
+    } // end method setStartTime
 
+    /**
+     * sets the patient name of the appointment
+     * 
+     * @param patientName String
+     */
     public void setPatientName(String patientName) {
         this.patientName = patientName;
-    }
+    } // end method setPatientName
 
+    /**
+     * sets the doctor name of the appointment
+     * 
+     * @param doctorName String
+     */
     public void setDoctorName(String doctorName) {
         this.doctorName = doctorName;
-    }
+    } // end method setDoctorName
 
+    /**
+     * sets the status of the appointment
+     * 
+     * @param status String
+     */
     public void setStatus(String status) {
         this.status = status;
-    }
+    } // end method setStatus
 
+    /**
+     * sets the description of the appointment
+     * 
+     * @param description String
+     */
     public void setDescription(String description) {
         this.description = description;
-    }
+    } // end method setDescription
 
+    /**
+     * gets the date of the appointment
+     * 
+     * @return LocalDate
+     */
     public LocalDate getDate() {
         return this.appointmentDate;
-    }
+    } // end method getDate
 
+    /**
+     * gets the start time of the appointment
+     * 
+     * @return LocalTime
+     */
     public LocalTime getStartTime() {
         return this.startTime;
-    }
+    } // end method getStartTime
 
+    /**
+     * gets the estimated end time of the appointment
+     * (calculated base on start time)
+     * 
+     * @return LocalTime
+     */
     public LocalTime getEndTime() {
         return this.startTime.plusMinutes(APPOINTMENT_DURATION);
-    }
+    } // end method getEndTime
 
+    /**
+     * gets the doctor name of the appointment
+     * 
+     * @return String
+     */
     public String getDoctorName() {
         return this.doctorName;
-    }
+    } // end method getDoctorName
 
+    /**
+     * gets the patient name of the appointment
+     * 
+     * @return String
+     */
     public String getPatientName() {
         return this.patientName;
-    }
+    } // end method getPatientName
 
+    /**
+     * gets the status of the appointment
+     * 
+     * @return String
+     */
     public String getStatus() {
         return this.status;
-    }
+    } // end method getStatus
 
+    /**
+     * gets the description of the appointment
+     * 
+     * @return String
+     */
     public String getDescription() {
         return this.description;
-    }
+    } // end method getDescription
 
+    // return string representation of appointment object 
     @Override
     public String toString() {
         return String.format("%s: %s%n%s: %s%n%s: %s%n%s: %s%n%s: %s%n%s: %s%n%s: %s%n",
@@ -135,5 +222,5 @@ public class Appointment implements Serializable {
         "Description", getDescription(),
         "Status", getStatus()
         );
-    }
-}
+    } // end method toString
+} // end class Appointment

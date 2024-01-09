@@ -30,7 +30,7 @@ public abstract class Person implements Serializable {
      * @param firstName String
      * @param lastName String
      * @param dateOfBirth LocalDate
-     * @param String String ("F" or "f" for Female, "M" or "m" for Male)
+     * @param gender String ("F" or "f" for Female, "M" or "m" for Male)
      * @param phoneNumber String
      * @param address String
      * @throws Exception
@@ -219,4 +219,4 @@ public abstract class Person implements Serializable {
         return String.format("Name: %s %nDate of Birth: %s %nAge: %d %nGender: %s %nPhone Number: %s %nAddress: %s %n",
                             getName(), getDateOfBirth(), getAge(), getGender(), getPhoneNumber(), getAddress());
     } // end method toString
-}
+} // end abstract class Person
