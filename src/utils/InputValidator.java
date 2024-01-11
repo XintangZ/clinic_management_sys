@@ -124,8 +124,6 @@ public abstract class InputValidator {
         }
     }
 
-    // TODO: add regex input validation
-
     public void close() {
         this.scanner.close();
     }
