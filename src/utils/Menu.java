@@ -80,17 +80,13 @@ public class Menu extends InputValidator {
      */
     public String getChosenOption() throws Exception {
         String[] userChoice = new String[1];
-        try {
-            limitAttempts(() -> {
-                // display options
-                displayOptions();
-                // get user choice
-                userChoice[0] = getChosenOptionNumber();
-            }, 3);
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
-            return null;
-        }
+
+        limitAttempts(() -> {
+            // display options
+            displayOptions();
+            // get user choice
+            userChoice[0] = getChosenOptionNumber();
+        }, 3);
 
         return this.menuOptions.get(Integer.valueOf(userChoice[0]) - 1);
     } // end method getChosenOption

@@ -32,7 +32,11 @@ public abstract class InputValidator {
             try {
                 methodToRun.run();
                 return;
-            } catch (Exception e) {
+            }
+            catch (NoDataException e) {
+                throw e;
+            }
+            catch (Exception e) {
                 System.err.println(e.getMessage());
                 if (attempts > 2) {
                     System.out.printf("%d attempts left. %n", --attempts);

@@ -48,11 +48,6 @@ public class HrPage extends Team6MedicalClinic {
             return;
         }
         
-        if (result == null) {
-            System.out.println("Doctor not found.");
-            return; // return if no result found
-        }
-        
         System.out.println("======= SEARCH RESULT =======");
         System.out.println(result); // print the result
 
