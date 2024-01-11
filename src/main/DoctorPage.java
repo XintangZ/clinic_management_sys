@@ -51,11 +51,6 @@ public class DoctorPage extends Team6MedicalClinic {
             return;
         }
         
-        if (result == null) {
-            System.out.println("Treatment not found.");
-            return; // return if no result found
-        }
-        
         System.out.println("======= SEARCH RESULT =======");
         System.out.println(result); // print the result
 
@@ -95,11 +90,6 @@ public class DoctorPage extends Team6MedicalClinic {
         } catch (Exception e) {
             System.err.println(e.getMessage());
             return;
-        }
-        
-        if (result == null) {
-            System.out.println("Patient not found.");
-            return; // return if no result found
         }
         
         System.out.println("======= SEARCH RESULT =======");

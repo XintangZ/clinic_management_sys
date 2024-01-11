@@ -239,7 +239,7 @@ public class User extends InputValidator {
                 return person;
             }
         }
-        return null;
+        throw new NoDataException();
     } // end method searchForPerson
 
     /**
@@ -274,7 +274,7 @@ public class User extends InputValidator {
                 return treatment;
             }
         }
-        return null;
+        throw new NoDataException();
     } // end method searchForTreatment
 
     /**
@@ -289,11 +289,7 @@ public class User extends InputValidator {
 
         Menu filters = new Menu("choose a filter", "Doctor's Name", "Patient's Name", "Date", "Specific Appointment");
         String chosenFilter = filters.getChosenOption();
-
-        if (chosenFilter == null) {
-            throw new Exception("");
-        }
-
+        
         switch (chosenFilter) {
             case "Doctor's Name":
                 String[] doctorName = new String[1];
@@ -594,7 +590,7 @@ public class User extends InputValidator {
      */
     public <T> void printAll(ArrayList<Object> objects, Class<T> type) {
         if (objects.isEmpty()) {
-            System.out.println("No record.");
+            System.out.println("No data.");
         } else {
             int index = 1;
             for (Object obj : objects) {

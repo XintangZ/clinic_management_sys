@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import src.person.Doctor;
 import src.person.Patient;
 import src.utils.Menu;
+import src.utils.NoDataException;
 import src.utils.ObjectIO;
 import src.clinic.Appointment;
 import src.clinic.Schedule;
@@ -37,7 +38,7 @@ public class ReceptionPage extends Team6MedicalClinic {
 
         try {
             user.limitAttempts(() -> {
-                doctorName[0] = chooseDoctor();      // choose one of the doctors of a certain specialty
+                doctorName[0] = chooseDoctor(); // choose one of the doctors of a certain specialty
             }, 3);
         } catch (Exception e) {
             System.err.println(e.getMessage());
@@ -56,11 +57,6 @@ public class ReceptionPage extends Team6MedicalClinic {
         } catch (Exception e) {
             System.err.println(e.getMessage());
             return;
-        }
-        
-        if (result == null) {
-            System.out.println("Patient not found.");
-            return; // return if no result found
         }
 
         System.out.println("\n======= ENTER APPOINTMENT DETAILS =======");
@@ -150,6 +146,10 @@ public class ReceptionPage extends Team6MedicalClinic {
             if (!specialties.contains(((Doctor) doctor).getSpecialty())) {
                 specialties.add(((Doctor) doctor).getSpecialty());
             }
+        }
+
+        if (specialties.isEmpty()) {
+            throw new NoDataException("No registered doctor.");
         }
 
         Menu specialtyList = new Menu("select a specialty", specialties);
