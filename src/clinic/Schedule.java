@@ -147,7 +147,7 @@ public interface Schedule {
 
         for (Object obj : allAppointments) {
             Appointment appointment = (Appointment) obj;
-            if (!appointment.getDate().isBefore(LocalDate.now())) {
+            if ((!appointment.getDate().isBefore(LocalDate.now())) && appointment.getStatus().equals("Confirmed")) {
                 futureAppointments.add(appointment);
             }
         } 
