@@ -162,6 +162,6 @@ public class Patient extends Person {
         + "\nAllergies: " + getAllergies() 
         + "\nInsurance company: " + getInsuranceCompany() 
         + "\nPolicy number: " + getPolicyNumber() 
-        + "\nCovered percentage: " + getCoveredPercentage() * 100 + "%"; 
+        + "\nCovered percentage: " + getCoveredPercentage() * 100 + "%\n"; 
     } // end method toString
 } // end class Patient
