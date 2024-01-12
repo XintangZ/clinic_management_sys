@@ -46,17 +46,17 @@ public class User extends InputValidator {
             person.setLastName(getString());
         }, attempts);
 
-        System.out.print("Date of Birth: ");
+        System.out.print("Date of Birth (yyyy-mm-dd): ");
         limitAttempts(() -> {
             person.setDateOfBirth(getString());
         }, attempts);
 
-        System.out.print("Gender: ");
+        System.out.print("Gender (F/M): ");
         limitAttempts(() -> {
             person.setGender(getString());
         }, attempts);
 
-        System.out.print("Phone Number: ");
+        System.out.print("Phone Number (xxx-xxx-xxxx): ");
         limitAttempts(() -> {
             person.setPhoneNumber(getString());
         }, attempts);
@@ -78,7 +78,7 @@ public class User extends InputValidator {
         Doctor doctor = new Doctor();
         setPersonalInfo(doctor);
 
-        System.out.print("Date of Employment: ");
+        System.out.print("Date of Employmenth (yyyy-mm-dd): ");
         limitAttempts(() -> {
             doctor.setDateOfEmployment(getString());
         }, attempts);
@@ -412,7 +412,7 @@ public class User extends InputValidator {
             updateAttr(person::setLastName); // last name
         }, attempts);
 
-        System.out.print("Date of Birth: " + person.getDateOfBirth() + " ");
+        System.out.print("Date of Birthh: " + person.getDateOfBirth() + " ");
         limitAttempts(() -> {
             updateAttr(person::setDateOfBirth); // date of birth
         }, attempts);
