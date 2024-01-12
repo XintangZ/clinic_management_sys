@@ -193,12 +193,12 @@ public class User extends InputValidator {
         appointment.setPatientName(patientName);
         appointment.setDoctorName(doctorName);
 
-        System.out.print("Appointment Date: ");
         limitAttempts(() -> {
+            System.out.print("Appointment Date: ");
             appointment.setDate(getString());
         }, attempts);
 
-        String[] timeSlots = { "09:00", "10:00", "11:00", "13:00", "14:00", "15:00" };
+        String[] timeSlots = { "09:00", "10:00", "11:00", "13:00", "14:00", "15:00", "16:00" };
         ArrayList<String> availableTimeSlots = new ArrayList<>();
 
         for (String time : timeSlots) {
@@ -210,8 +210,8 @@ public class User extends InputValidator {
         Menu timsSlots = new Menu("available time slots", availableTimeSlots);
         appointment.setStartTime(timsSlots.getChosenOption());
 
-        System.out.print("Description: ");
         limitAttempts(() -> {
+            System.out.print("Description: ");
             appointment.setDescription(getString());
         }, attempts);
 
