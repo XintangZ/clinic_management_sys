@@ -32,7 +32,7 @@ public class DoctorPage extends Team6MedicalClinic {
         System.out.println("======= NEW TREATMENT =======");
         Treatment newTreatment;
         try {
-            newTreatment = user.createTreatment();
+            newTreatment = user.createTreatment(allDoctors, allPatients);
         } catch (Exception e) {
             System.err.println(e.getMessage());
             return;

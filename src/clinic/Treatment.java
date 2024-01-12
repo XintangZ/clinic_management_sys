@@ -128,7 +128,7 @@ public class Treatment implements Serializable {
         } catch (DateTimeParseException e) {
             throw new Exception("Invalid date format. Format must be \"yyyy-mm-dd\".");
         }
-        setStartDate(endDate);
+        setEndDate(endDate);
     } // end method setEndDate
 
     /**

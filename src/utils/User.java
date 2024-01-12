@@ -107,6 +107,11 @@ public class User extends InputValidator {
         Patient patient = new Patient();
         setPersonalInfo(patient);
 
+        System.out.print("Health Card Number: ");
+        limitAttempts(() -> {
+            patient.setHealthCardNumber(getString());
+        }, attempts);
+
         System.out.print("Allergies: ");
         limitAttempts(() -> {
             patient.setAllergies(getString());
@@ -137,17 +142,19 @@ public class User extends InputValidator {
      * @return a Treatment object
      * @throws Exception if maxinum number of attempts reached
      */
-    public Treatment createTreatment() throws Exception {
+    public Treatment createTreatment(ArrayList<Object> allDoctors, ArrayList<Object> allPatients) throws Exception {
         Treatment treatment = new Treatment();
 
-        System.out.print("Doctor Name: ");
+        System.out.println("Doctor: ");
         limitAttempts(() -> {
-            treatment.setDoctorName(getString());
+            Person doctor = searchForPerson(allDoctors);
+            treatment.setDoctorName(doctor.getName());
         }, attempts);
 
-        System.out.print("Patient Name: ");
+        System.out.println("Patient: ");
         limitAttempts(() -> {
-            treatment.setPatientName(getString());
+            Person patient = searchForPerson(allPatients);
+            treatment.setPatientName(patient.getName());
         }, attempts);
 
         System.out.print("Medication: ");
@@ -224,12 +231,13 @@ public class User extends InputValidator {
     public Person searchForPerson(ArrayList<Object> arrayList) throws Exception {
         String[] name = new String[2];
 
-        System.out.print("First Name: ");
         limitAttempts(() -> {
+            System.out.print("First Name: ");
             name[0] = getString();
         }, attempts);
-        System.out.print("Last Name: ");
+        
         limitAttempts(() -> {
+            System.out.print("Last Name: ");
             name[1] = getString();
         }, attempts);
 
@@ -239,7 +247,7 @@ public class User extends InputValidator {
                 return person;
             }
         }
-        throw new NoDataException();
+        throw new NoDataException("Person not found");
     } // end method searchForPerson
 
     /**
@@ -253,19 +261,19 @@ public class User extends InputValidator {
         String[] name = new String[2];
         LocalDate[] issueDate = new LocalDate[1];
 
-        System.out.print("Patient First Name: ");
         limitAttempts(() -> {
+            System.out.print("Patient First Name: ");
             name[0] = getString();
         }, attempts);
 
-        System.out.print("Patient Last Name: ");
         limitAttempts(() -> {
+            System.out.print("Patient Last Name: ");
             name[1] = getString();
         }, attempts);
 
-        System.out.print("Issue Date (yyyy-mm-dd): ");
         limitAttempts(() -> {
-            issueDate[1] = LocalDate.parse(getString());
+            System.out.print("Issue Date (yyyy-mm-dd): ");
+            issueDate[0] = LocalDate.parse(getString());
         }, attempts);
 
         for (Object obj : arrayList) {
@@ -274,7 +282,7 @@ public class User extends InputValidator {
                 return treatment;
             }
         }
-        throw new NoDataException();
+        throw new NoDataException("Treatment not found.");
     } // end method searchForTreatment
 
     /**
@@ -361,6 +369,10 @@ public class User extends InputValidator {
                 }
         }
         
+        if (filteredAppointments.isEmpty()) {
+            throw new NoDataException("Appointment not found.");
+        }
+
         return filteredAppointments;
     } // end method searchForAppointment
 
@@ -487,7 +499,7 @@ public class User extends InputValidator {
             updateAttr(patient::setPolicyNumber); // policy number
         }, attempts);
 
-        System.out.print("Covered Percentage: " + patient.getCoveredPercentage() + " ");
+        System.out.print("Covered Percentage: " + patient.getCoveredPercentage() * 100 + "% ");
         limitAttempts(() -> {
             updateAttr(patient::setCoveredPercentage); // covered percentage
         }, attempts);
@@ -506,12 +518,12 @@ public class User extends InputValidator {
         System.out.println("======= EDIT TREATMENT INFO =======");
         System.out.println("Input new information if needed, or skip a field by pressing the enter key.");
 
-        System.out.print("Doctor Name: " + treatment.getMedication() + " ");
+        System.out.print("Doctor Name: " + treatment.getDoctorName() + " ");
         limitAttempts(() -> {
             updateAttr(treatment::setDoctorName); // doctor name
         }, attempts);
 
-        System.out.print("Patient Name: " + treatment.getMedication() + " ");
+        System.out.print("Patient Name: " + treatment.getPatientName() + " ");
         limitAttempts(() -> {
             updateAttr(treatment::setPatientName); // petient name
         }, attempts);
