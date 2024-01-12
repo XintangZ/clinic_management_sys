@@ -92,7 +92,7 @@ public class Appointment implements Serializable {
         try {
             time = LocalTime.parse(timeToParse);
         } catch (DateTimeParseException e) {
-            throw new Exception("Invalid time format. Format must be \"hh:ss\".");
+            throw new Exception("Invalid time format. Format must be \"hh:mm\".");
         }
         setStartTime(time);    
     } // end method setStartTime

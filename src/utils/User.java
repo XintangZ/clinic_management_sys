@@ -46,17 +46,17 @@ public class User extends InputValidator {
             person.setLastName(getString());
         }, attempts);
 
-        System.out.print("Date of Birth: ");
+        System.out.print("Date of Birth (yyyy-mm-dd): ");
         limitAttempts(() -> {
             person.setDateOfBirth(getString());
         }, attempts);
 
-        System.out.print("Gender: ");
+        System.out.print("Gender (F/M): ");
         limitAttempts(() -> {
             person.setGender(getString());
         }, attempts);
 
-        System.out.print("Phone Number: ");
+        System.out.print("Phone Number (xxx-xxx-xxxx): ");
         limitAttempts(() -> {
             person.setPhoneNumber(getString());
         }, attempts);
@@ -78,7 +78,7 @@ public class User extends InputValidator {
         Doctor doctor = new Doctor();
         setPersonalInfo(doctor);
 
-        System.out.print("Date of Employment: ");
+        System.out.print("Date of Employmenth (yyyy-mm-dd): ");
         limitAttempts(() -> {
             doctor.setDateOfEmployment(getString());
         }, attempts);
@@ -230,6 +230,7 @@ public class User extends InputValidator {
      */
     public Person searchForPerson(ArrayList<Object> arrayList) throws Exception {
         String[] name = new String[2];
+        String[] phone = new String[1];
 
         limitAttempts(() -> {
             System.out.print("First Name: ");
@@ -241,9 +242,14 @@ public class User extends InputValidator {
             name[1] = getString();
         }, attempts);
 
+        limitAttempts(() -> {
+            System.out.print("Phone Number (xxx-xxx-xxxx): ");
+            phone[0] = getString();
+        }, attempts);
+
         for (Object obj : arrayList) {
             Person person = (Person) obj;
-            if (person.getName().equals(name[0] + " " + name[1])) {
+            if (person.getName().equals(name[0] + " " + name[1]) && person.getPhoneNumber().equals(phone[0])) {
                 return person;
             }
         }
@@ -350,7 +356,7 @@ public class User extends InputValidator {
                     specificDate[0] = LocalDate.parse(getString());
                 }, attempts);
 
-                System.out.println("Enter Appointment Time (hh:ss): ");
+                System.out.println("Enter Appointment Time (hh:mm): ");
                 limitAttempts(() -> {
                     specificTime[0] = LocalTime.parse(getString());
                 }, attempts);
@@ -412,7 +418,7 @@ public class User extends InputValidator {
             updateAttr(person::setLastName); // last name
         }, attempts);
 
-        System.out.print("Date of Birth: " + person.getDateOfBirth() + " ");
+        System.out.print("Date of Birthh: " + person.getDateOfBirth() + " ");
         limitAttempts(() -> {
             updateAttr(person::setDateOfBirth); // date of birth
         }, attempts);
