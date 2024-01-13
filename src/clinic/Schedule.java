@@ -5,6 +5,14 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
+/**
+ * interface Schedule
+ * 
+ * @version 1.00
+ * @since 2024-01-08
+ * @author Team 6
+ */
+
 public interface Schedule {
     /**
      * displays a time table in the terminal showing the availability of a certain doctor
@@ -24,8 +32,7 @@ public interface Schedule {
 
     /**
      * recursively prints a time table of a day.
-     * each time slot is of 30-min length, 
-     * the time table will be from 9am to 14pm, 
+     * each time slot is of 60-min length, 
      * with a lunchbreak from noon to 1pm
      * 
      * @param date a LocalDate of the current day
@@ -154,4 +161,4 @@ public interface Schedule {
 
         return futureAppointments;
     } // end method getFutureAppointments
-}
+} // end interface Schedule
