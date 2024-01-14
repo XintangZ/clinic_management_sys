@@ -556,50 +556,6 @@ public class User extends InputValidator {
     } // end method editTreatment
 
     /**
-     * displays the attributes of an appointmet line by line, 
-     * the user can decide if to enter a new value at the end of each line. 
-     * if no new value is entered (the user hit enter without typing anything other than spaces), no changes will be made.
-     * if the user entered a new value, updates the coresponding property
-     * 
-     * @param treatment the Appointment object to be modified
-     * @throws Exception if maxinum number of attempts reached
-     */
-    public void editAppointment(Appointment appointment) throws Exception {
-        System.out.println("======= EDIT APPOINTMENT INFO =======");
-        System.out.println("Input new information if needed, or skip a field by pressing the enter key.");
-
-        System.out.print("Date: " + appointment.getDate() + " ");
-        limitAttempts(() -> {
-            updateAttr(appointment::setDate); // date
-        }, attempts);
-
-        System.out.print("Start Time: " + appointment.getStartTime() + " ");
-        limitAttempts(() -> {
-            updateAttr(appointment::setStartTime); // start time
-        }, attempts);
-
-        System.out.print("Doctor Name: " + appointment.getDoctorName() + " ");
-        limitAttempts(() -> {
-            updateAttr(appointment::setDoctorName); // doctor name
-        }, attempts);
-
-        System.out.print("Patient Name: " + appointment.getPatientName() + " ");
-        limitAttempts(() -> {
-            updateAttr(appointment::setPatientName); // petient name
-        }, attempts);
-
-        System.out.print("Description: " + appointment.getDescription() + " ");
-        limitAttempts(() -> {
-            updateAttr(appointment::setDescription); // description
-        }, attempts);
-
-        System.out.print("Status: " + appointment.getStatus() + " ");
-        limitAttempts(() -> {
-            updateAttr(appointment::setStatus); // status
-        }, attempts);
-    } // end method editAppointment
-
-    /**
      * prints all objects from an ArrayList
      * 
      * @param <T> a generic type
