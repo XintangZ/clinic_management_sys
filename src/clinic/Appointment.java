@@ -39,18 +39,13 @@ public class Appointment implements Serializable {
      */
     public Appointment(LocalDate appointmentDate, LocalTime startTime, String patientName, String doctorName,
             String status, String description) throws Exception {
-        setAppointment(appointmentDate, startTime, patientName, doctorName, status, description);
-    } // end constructor with params
-    
-    public void setAppointment(LocalDate appointmentDate, LocalTime startTime, String patientName,
-            String doctorName, String status, String description) throws Exception { // same as edit appointment
         setDate(appointmentDate);
         setStartTime(startTime);
         setPatientName(patientName);
         setDoctorName(doctorName);
         setStatus(status);
         setDescription(description);
-    }
+    } // end constructor with params
 
     /**
      * sets the date of the appointment
