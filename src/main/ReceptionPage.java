@@ -88,24 +88,19 @@ public class ReceptionPage extends Team6MedicalClinic {
         user.printAll(results, Appointment.class);
 
         if (results.size() == 1) {
-            boolean[] isToEdit = new boolean[1];
+            boolean[] isToCancel = new boolean[1];
             try {
                 user.limitAttempts(() -> {
-                    isToEdit[0] = user.getResponse(
-                            "Would you like to edit the appointment?");  // ask if the user wants to edit the found object
+                    isToCancel[0] = user.getResponse(
+                            "Would you like to cancel the appointment?");  // ask if the user wants to edit the found object
                 }, 3);
             } catch (Exception e) {
                 System.err.println(e.getMessage());
                 return;
             }
             
-            if (isToEdit[0]) { 
-                try {
-                    user.editAppointment((Appointment) results.get(0)); // edit object attributes
-                } catch (Exception e) {
-                    System.err.println(e.getMessage());
-                    return;
-                }
+            if (isToCancel[0]) { 
+                ((Appointment) results.get(0)).setStatus("Cancelled"); // cancel the appointment
                 ObjectIO.writeObjects(ObjectIO.APPOINTMENT_FILE_PATH, allAppointments); // write objects to data file
             }
         }
