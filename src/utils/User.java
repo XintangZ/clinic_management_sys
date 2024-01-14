@@ -36,33 +36,33 @@ public class User extends InputValidator {
      * @throws Exception if maxinum number of attempts reached
      */
     public void setPersonalInfo(Person person) throws Exception {
-        System.out.print("First Name: ");
         limitAttempts(() -> {
+            System.out.print("First Name: ");
             person.setFirstName(getString());
         }, attempts);
 
-        System.out.print("Last Name: ");
         limitAttempts(() -> {
+            System.out.print("Last Name: ");
             person.setLastName(getString());
         }, attempts);
 
-        System.out.print("Date of Birth (yyyy-mm-dd): ");
         limitAttempts(() -> {
+            System.out.print("Date of Birth (yyyy-mm-dd): ");
             person.setDateOfBirth(getString());
         }, attempts);
 
-        System.out.print("Gender (F/M): ");
         limitAttempts(() -> {
+            System.out.print("Gender (F/M): ");
             person.setGender(getString());
         }, attempts);
 
-        System.out.print("Phone Number (xxx-xxx-xxxx): ");
         limitAttempts(() -> {
+            System.out.print("Phone Number (xxx-xxx-xxxx): ");
             person.setPhoneNumber(getString());
         }, attempts);
 
-        System.out.print("Address: ");
         limitAttempts(() -> {
+            System.out.print("Address: ");
             person.setAddress(getString());
         }, attempts);
     } // end method setPersonalInfo
@@ -78,18 +78,18 @@ public class User extends InputValidator {
         Doctor doctor = new Doctor();
         setPersonalInfo(doctor);
 
-        System.out.print("Date of Employmenth (yyyy-mm-dd): ");
         limitAttempts(() -> {
+            System.out.print("Date of Employmenth (yyyy-mm-dd): ");
             doctor.setDateOfEmployment(getString());
         }, attempts);
 
-        System.out.print("SIN Number: ");
         limitAttempts(() -> {
+            System.out.print("SIN Number: ");
             doctor.setSinNumber(getString());
         }, attempts);
 
-        System.out.print("Specialty: ");
         limitAttempts(() -> {
+            System.out.print("Specialty: ");
             doctor.setSpecialty(getString());
         }, attempts);
 
@@ -107,28 +107,28 @@ public class User extends InputValidator {
         Patient patient = new Patient();
         setPersonalInfo(patient);
 
-        System.out.print("Health Card Number: ");
         limitAttempts(() -> {
+            System.out.print("Health Card Number: ");
             patient.setHealthCardNumber(getString());
         }, attempts);
 
-        System.out.print("Allergies: ");
         limitAttempts(() -> {
+            System.out.print("Allergies: ");
             patient.setAllergies(getString());
         }, attempts);
 
-        System.out.print("Insurance Company: ");
         limitAttempts(() -> {
+            System.out.print("Insurance Company: ");
             patient.setInsuranceCompany(getString());
         }, attempts);
 
-        System.out.print("Policy Number: ");
         limitAttempts(() -> {
+            System.out.print("Policy Number: ");
             patient.setPolicyNumber(getString());
         }, attempts);
 
-        System.out.print("Covered Percentage: ");
         limitAttempts(() -> {
+            System.out.print("Covered Percentage: ");
             patient.setCoveredPercentage(getString());
         }, attempts);
         
@@ -145,35 +145,35 @@ public class User extends InputValidator {
     public Treatment createTreatment(ArrayList<Object> allDoctors, ArrayList<Object> allPatients) throws Exception {
         Treatment treatment = new Treatment();
 
-        System.out.println("Doctor: ");
         limitAttempts(() -> {
+            System.out.println("Doctor: ");
             Person doctor = searchForPerson(allDoctors);
             treatment.setDoctorName(doctor.getName());
         }, attempts);
 
-        System.out.println("Patient: ");
         limitAttempts(() -> {
+            System.out.println("Patient: ");
             Person patient = searchForPerson(allPatients);
             treatment.setPatientName(patient.getName());
         }, attempts);
 
-        System.out.print("Medication: ");
         limitAttempts(() -> {
+            System.out.print("Medication: ");
             treatment.setMedication(getString());
         }, attempts);
 
-        System.out.print("Description: ");
         limitAttempts(() -> {
+            System.out.print("Description: ");
             treatment.setDescription(getString());
         }, attempts);
 
-        System.out.print("Start Date: ");
         limitAttempts(() -> {
+            System.out.print("Start Date: ");
             treatment.setStartDate(getString());
         }, attempts);
 
-        System.out.print("End Date: ");
         limitAttempts(() -> {
+            System.out.print("End Date: ");
             treatment.setEndDate(getString());
         }, attempts);
 
@@ -308,8 +308,8 @@ public class User extends InputValidator {
             case "Doctor's Name":
                 String[] doctorName = new String[1];
 
-                System.out.println("Enter Doctor's Name: ");
                 limitAttempts(() -> {
+                    System.out.println("Enter Doctor's Name: ");
                     doctorName[0] = getString();
                 }, attempts);
 
@@ -322,8 +322,8 @@ public class User extends InputValidator {
             case "Patient's Name":
                 String[] patientName = new String[1];
 
-                System.out.println("Enter Patient's Name: ");
                 limitAttempts(() -> {
+                    System.out.println("Enter Patient's Name: ");
                     patientName[0] = getString();
                 }, attempts);
 
@@ -336,8 +336,8 @@ public class User extends InputValidator {
             case "Date":
                 LocalDate[] date = new LocalDate[1];
 
-                System.out.println("Enter Appointment Date (yyyy-mm-dd): ");
                 limitAttempts(() -> {
+                    System.out.println("Enter Appointment Date (yyyy-mm-dd): ");
                     date[0] = LocalDate.parse(getString());
                 }, attempts);
                 for (Object obj : allAppointments) {
@@ -351,18 +351,18 @@ public class User extends InputValidator {
                 LocalTime[] specificTime = new LocalTime[1];
                 String[] specificDoctorName = new String[1];
 
-                System.out.println("Enter Appointment Date (yyyy-mm-dd): ");
                 limitAttempts(() -> {
+                    System.out.println("Enter Appointment Date (yyyy-mm-dd): ");
                     specificDate[0] = LocalDate.parse(getString());
                 }, attempts);
 
-                System.out.println("Enter Appointment Time (hh:mm): ");
                 limitAttempts(() -> {
+                    System.out.println("Enter Appointment Time (hh:mm): ");
                     specificTime[0] = LocalTime.parse(getString());
                 }, attempts);
 
-                System.out.println("Enter Doctor's Name: ");
                 limitAttempts(() -> {
+                    System.out.println("Enter Doctor's Name: ");
                     specificDoctorName[0] = getString();
                 }, attempts);
 
@@ -408,33 +408,33 @@ public class User extends InputValidator {
      * @throws Exception if maxinum number of attempts reached
      */
     public void editPerson(Person person) throws Exception {
-        System.out.print("First Name: " + person.getFirstName() + " ");
         limitAttempts(() -> {
+            System.out.print("First Name: " + person.getFirstName() + " ");
             updateAttr(person::setFirstName); // first name
         }, attempts);
 
-        System.out.print("Last Name: " + person.getLastName() + " ");
         limitAttempts(() -> {
+            System.out.print("Last Name: " + person.getLastName() + " ");
             updateAttr(person::setLastName); // last name
         }, attempts);
 
-        System.out.print("Date of Birthh: " + person.getDateOfBirth() + " ");
         limitAttempts(() -> {
+            System.out.print("Date of Birthh: " + person.getDateOfBirth() + " ");
             updateAttr(person::setDateOfBirth); // date of birth
         }, attempts);
 
-        System.out.print("Gender: " + person.getGender() + " ");
         limitAttempts(() -> {
+            System.out.print("Gender: " + person.getGender() + " ");
             updateAttr(person::setGender); // gender
         }, attempts);
 
-        System.out.print("Phone Number: " + person.getPhoneNumber() + " ");
         limitAttempts(() -> {
+            System.out.print("Phone Number: " + person.getPhoneNumber() + " ");
             updateAttr(person::setPhoneNumber); // phone number
         }, attempts);
 
-        System.out.print("Address: " + person.getAddress() + " ");
         limitAttempts(() -> {
+            System.out.print("Address: " + person.getAddress() + " ");
             updateAttr(person::setAddress); // address
         }, attempts);
     }
@@ -454,18 +454,18 @@ public class User extends InputValidator {
 
         editPerson(doctor);
 
-        System.out.print("Date of Employment: " + doctor.getDateOfEmployment() + " ");
         limitAttempts(() -> {
+            System.out.print("Date of Employment: " + doctor.getDateOfEmployment() + " ");
             updateAttr(doctor::setDateOfEmployment); // date of employment
         }, attempts);
 
-        System.out.print("SIN Number: " + doctor.getSinNumber() + " ");
         limitAttempts(() -> {
+            System.out.print("SIN Number: " + doctor.getSinNumber() + " ");
             updateAttr(doctor::setSinNumber); // date of employment
         }, attempts);
 
-        System.out.print("Specialty: " + doctor.getSpecialty() + " ");
         limitAttempts(() -> {
+            System.out.print("Specialty: " + doctor.getSpecialty() + " ");
             updateAttr(doctor::setSpecialty); // specialty
         }, attempts);
     }
@@ -485,28 +485,28 @@ public class User extends InputValidator {
 
         editPerson(patient);
 
-        System.out.print("Health Card Number: " + patient.getHealthCardNumber() + " ");
         limitAttempts(() -> {
+            System.out.print("Health Card Number: " + patient.getHealthCardNumber() + " ");
             updateAttr(patient::setHealthCardNumber); // health card number
         }, attempts);
 
-        System.out.print("Allergies: " + patient.getAllergies() + " ");
         limitAttempts(() -> {
+            System.out.print("Allergies: " + patient.getAllergies() + " ");
             updateAttr(patient::setAllergies); // allergies
         }, attempts);
 
-        System.out.print("Insurance Company: " + patient.getInsuranceCompany() + " ");
         limitAttempts(() -> {
+            System.out.print("Insurance Company: " + patient.getInsuranceCompany() + " ");
             updateAttr(patient::setInsuranceCompany); // insurance company
         }, attempts);
 
-        System.out.print("Policy Number: " + patient.getPolicyNumber() + " ");
         limitAttempts(() -> {
+            System.out.print("Policy Number: " + patient.getPolicyNumber() + " ");
             updateAttr(patient::setPolicyNumber); // policy number
         }, attempts);
 
-        System.out.print("Covered Percentage: " + patient.getCoveredPercentage() * 100 + "% ");
         limitAttempts(() -> {
+            System.out.print("Covered Percentage: " + patient.getCoveredPercentage() * 100 + "% ");
             updateAttr(patient::setCoveredPercentage); // covered percentage
         }, attempts);
     }
@@ -524,33 +524,33 @@ public class User extends InputValidator {
         System.out.println("======= EDIT TREATMENT INFO =======");
         System.out.println("Input new information if needed, or skip a field by pressing the enter key.");
 
-        System.out.print("Doctor Name: " + treatment.getDoctorName() + " ");
         limitAttempts(() -> {
+            System.out.print("Doctor Name: " + treatment.getDoctorName() + " ");
             updateAttr(treatment::setDoctorName); // doctor name
         }, attempts);
 
-        System.out.print("Patient Name: " + treatment.getPatientName() + " ");
         limitAttempts(() -> {
+            System.out.print("Patient Name: " + treatment.getPatientName() + " ");
             updateAttr(treatment::setPatientName); // petient name
         }, attempts);
 
-        System.out.print("Medication: " + treatment.getMedication() + " ");
         limitAttempts(() -> {
+            System.out.print("Medication: " + treatment.getMedication() + " ");
             updateAttr(treatment::setMedication); // medication
         }, attempts);
 
-        System.out.print("Description: " + treatment.getDescription() + " ");
         limitAttempts(() -> {
+            System.out.print("Description: " + treatment.getDescription() + " ");
             updateAttr(treatment::setDescription); // description
         }, attempts);
 
-        System.out.print("Start Date: " + treatment.getStartDate() + " ");
         limitAttempts(() -> {
+            System.out.print("Start Date: " + treatment.getStartDate() + " ");
             updateAttr(treatment::setStartDate); // start date
         }, attempts);
 
-        System.out.print("End Date: " + treatment.getEndDate() + " ");
         limitAttempts(() -> {
+            System.out.print("End Date: " + treatment.getEndDate() + " ");
             updateAttr(treatment::setEndDate); // end date
         }, attempts);
     } // end method editTreatment
